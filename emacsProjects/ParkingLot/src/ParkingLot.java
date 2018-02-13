@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public class ParkingLot {
     
-    ArrayList <Spots> spots = new ArrayList();
+    ArrayList <Spot> spots = new ArrayList();
     private int numParkingSpots; 
     private int maxSize;
     private String lotName;
