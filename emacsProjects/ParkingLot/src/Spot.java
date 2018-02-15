@@ -1,3 +1,6 @@
+
+import java.time.LocalDateTime;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -9,12 +12,15 @@
  * @author Andrew Smith
  */
 public class Spot {
+    
     private ParkingLot lot;
     private boolean available;
     private Obstruction current;
+    private LocalDateTime timeOccupied;
+    
     
     public enum Obstruction{
-        NONE, TAKEN, CONSTRUCTION, RESERVED, SNOW,
+        NONE, CONSTRUCTION, RESERVED, SNOW,
         EMERGENCY, OTHER
     }
     
@@ -36,5 +42,13 @@ public class Spot {
     
     public Obstruction getObstruction(){
         return current;
+    }
+    
+    public void setTimeOccupied(LocalDateTime timeOccupied){
+        this.timeOccupied = timeOccupied;
+    }
+    
+    public LocalDateTime getTimeOccupied(){
+        return timeOccupied;
     }
 }
