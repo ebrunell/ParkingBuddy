@@ -21,7 +21,7 @@ public class MainMenuState extends State {
             boolean withinX = ((Gdx.input.getX() > (ParkingBuddy.width/2)+55)) && ((Gdx.input.getX() < (ParkingBuddy.width/2)+175));
             boolean withinY = (Gdx.input.getY() > (ParkingBuddy.height/2)-60) && ((Gdx.input.getY() < (ParkingBuddy.height/2)+100));
             if(withinX && withinY){
-                //System.out.println("Title clicked.");
+                //area clicked
                 this.dispose();
                 gsm.pop();
                 ThankYouState s = new ThankYouState(gsm);

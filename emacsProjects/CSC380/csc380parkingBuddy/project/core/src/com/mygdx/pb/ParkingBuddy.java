@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.states.GuiStateManager;
 import com.mygdx.game.states.MainMenuState;
+import com.mygdx.game.states.MenuState;
 
 public class ParkingBuddy extends ApplicationAdapter {
 	
@@ -26,7 +27,7 @@ public class ParkingBuddy extends ApplicationAdapter {
                 //Gui state manager is a stack of states.
                 gsm = new GuiStateManager();
 		Gdx.gl.glClearColor(1, 0, 0, 1);
-                gsm.push(new MainMenuState(gsm));
+                gsm.push(new MenuState(gsm));
 	}
 
 	@Override

@@ -16,7 +16,7 @@ public class ThankYouState extends State{
     
     public ThankYouState(GuiStateManager gsm) {
         super(gsm);
-        background = new Texture("D:\\Cygwin\\home\\Mike\\emacsProjects\\CSC380\\csc380parkingBuddy\\project\\core\\assets\\Thanks.png");
+        background = new Texture("Thanks.png");
     }
 
     @Override
