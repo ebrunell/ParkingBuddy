@@ -5,7 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.states.GuiStateManager;
-import com.mygdx.game.states.MenuState;
+import com.mygdx.game.states.MainMenuState;
 
 public class PBApp extends ApplicationAdapter {
 	
@@ -25,7 +25,7 @@ public class PBApp extends ApplicationAdapter {
                 //Gui state manager is a stack of states.
                 gsm = new GuiStateManager();
 		Gdx.gl.glClearColor(1, 0, 0, 1);
-                gsm.push(new MenuState(gsm));
+                gsm.push(new MainMenuState(gsm));
 	}
 
 	@Override
