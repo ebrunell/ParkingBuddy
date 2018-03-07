@@ -17,11 +17,11 @@ public class MainMenuState extends State {
     @Override
     public void handleInput() {
         if(Gdx.input.justTouched()) {
-  
-           boolean withinSheldonX = (Gdx.input.getX() >= 71) && (Gdx.input.getX() <= 427);
-           boolean withinSheldonY = (Gdx.input.getY() <= 303) && (Gdx.input.getY() >= 225);
-           boolean withinShinemanX = (Gdx.input.getX() >= 74) && (Gdx.input.getX() <= 427);
-           boolean withinShinemanY = (Gdx.input.getY() <= 439) && (Gdx.input.getY() >= 358);
+           
+           boolean withinSheldonX = (Gdx.input.getX() >= 70) && (Gdx.input.getX() <= 430);
+           boolean withinSheldonY = (Gdx.input.getY() <= 380) && (Gdx.input.getY() >= 300);
+           boolean withinShinemanX = (Gdx.input.getX() >= 70) && (Gdx.input.getX() <= 430);
+           boolean withinShinemanY = (Gdx.input.getY() <= 520) && (Gdx.input.getY() >= 430);
            
             if (withinSheldonX && withinSheldonY) {
                 // Sheldon button clicked, proceed to Sheldon Map
@@ -37,7 +37,7 @@ public class MainMenuState extends State {
                 gsm.pop();
                 ShinemanMapState sm = new ShinemanMapState(gsm);
                 gsm.push(sm);
-            } 
+            }
         }
     }
 
