@@ -3,8 +3,6 @@ package com.mygdx.game.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.mygdx.game.states.GuiStateManager;
-import com.mygdx.game.states.State;
 import com.mygdx.parkingbuddy.PBApp;
 
 /**
