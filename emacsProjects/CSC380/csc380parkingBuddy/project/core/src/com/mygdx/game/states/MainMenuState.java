@@ -11,7 +11,7 @@ public class MainMenuState extends State {
     private Texture background;
     public MainMenuState(GuiStateManager gsm) {
         super(gsm);
-        background = new Texture("D:\\Cygwin\\home\\Mike\\emacsProjects\\CSC380\\csc380parkingBuddy\\project\\core\\assets\\background.png");
+        background = new Texture("background.png");
     }
 
     @Override
@@ -24,7 +24,7 @@ public class MainMenuState extends State {
                 //area clicked
                 this.dispose();
                 gsm.pop();
-                ThankYouState s = new ThankYouState(gsm);
+                ServerTestState s = new ServerTestState(gsm);
                 gsm.push(s);
             }
         }

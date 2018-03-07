@@ -10,11 +10,11 @@ import com.mygdx.pb.ParkingBuddy;
 /**
  * @author Mike
  */
-public class ThankYouState extends State{
+public class ServerTestState extends State{
     
     private Texture background;
     
-    public ThankYouState(GuiStateManager gsm) {
+    public ServerTestState(GuiStateManager gsm) {
         super(gsm);
         background = new Texture("Thanks.png");
     }

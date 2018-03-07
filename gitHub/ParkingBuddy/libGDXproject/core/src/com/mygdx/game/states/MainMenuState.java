@@ -11,21 +11,32 @@ public class MainMenuState extends State {
     private Texture background;
     public MainMenuState(GuiStateManager gsm) {
         super(gsm);
-        background = new Texture("background.png");
+        background = new Texture("TitleScreen.png");
     }
 
     @Override
     public void handleInput() {
-        if(Gdx.input.justTouched()){
-            //TODO: Make button objects with methods in them to check if theyre clicked
-            boolean withinX = ((Gdx.input.getX() > (PBApp.width/2)+55)) && ((Gdx.input.getX() < (PBApp.width/2)+175));
-            boolean withinY = (Gdx.input.getY() > (PBApp.height/2)-60) && ((Gdx.input.getY() < (PBApp.height/2)+100));
-            if(withinX && withinY){
-                //area clicked
+        if(Gdx.input.justTouched()) {
+           
+           boolean withinSheldonX = (Gdx.input.getX() >= 70) && (Gdx.input.getX() <= 430);
+           boolean withinSheldonY = (Gdx.input.getY() <= 380) && (Gdx.input.getY() >= 300);
+           boolean withinShinemanX = (Gdx.input.getX() >= 70) && (Gdx.input.getX() <= 430);
+           boolean withinShinemanY = (Gdx.input.getY() <= 520) && (Gdx.input.getY() >= 430);
+           
+            if (withinSheldonX && withinSheldonY) {
+                // Sheldon button clicked, proceed to Sheldon Map
                 this.dispose();
                 gsm.pop();
-                ServerTestState s = new ServerTestState(gsm);
-                gsm.push(s);
+                SheldonMapState sd = new SheldonMapState(gsm);
+                gsm.push(sd);
+            }
+            
+            if (withinShinemanX && withinShinemanY) {
+                // Shineman button clicked, proceed to Shineman Map
+                this.dispose();
+                gsm.pop();
+                ShinemanMapState sm = new ShinemanMapState(gsm);
+                gsm.push(sm);
             }
         }
     }
@@ -47,3 +58,4 @@ public class MainMenuState extends State {
     }
     
 }
+
