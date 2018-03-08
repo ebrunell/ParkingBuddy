@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.parkingbuddy.PBApp;
-import javafx.scene.text.Text;
 
 /**
  * @author Mike
@@ -12,7 +11,6 @@ import javafx.scene.text.Text;
 public class MenuState extends State{
     
     Texture background;
-    Text example;
     
     public MenuState(GuiStateManager gsm) {
         super(gsm);

@@ -1,6 +1,7 @@
 package com.mygdx.game.states;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.parkingbuddy.PBApp;
 
@@ -8,10 +9,13 @@ import com.mygdx.parkingbuddy.PBApp;
  * @author Mike
  */
 public class MainMenuState extends State {
-    private Texture background;
+    private Sprite background;
     public MainMenuState(GuiStateManager gsm) {
         super(gsm);
-        background = new Texture("TitleScreen.png");
+        background = new Sprite(new Texture(Gdx.files.internal("TitleScreen.png")));
+        background.setPosition(0,0);
+        background.setSize(400,800);
+
     }
 
     @Override
@@ -49,12 +53,13 @@ public class MainMenuState extends State {
     @Override
     public void render(SpriteBatch sb) {
         sb.begin();
-        sb.draw(background, 0, 0, PBApp.width, PBApp.height);
+        sb.draw(background, 0, 0, background.getWidth(), background.getHeight());
+
         sb.end();
     }
     public void dispose(){
         //remember to add all drawn objects to this method.
-        background.dispose();
+        //'background.dispose();
     }
     
 }
