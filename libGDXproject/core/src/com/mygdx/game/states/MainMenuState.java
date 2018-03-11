@@ -14,7 +14,8 @@ public class MainMenuState extends State {
         super(gsm);
         background = new Sprite(new Texture(Gdx.files.internal("TitleScreen.png")));
         background.setPosition(0,0);
-        background.setSize(400,800);
+        background.setSize(Gdx.app.getGraphics().getWidth(), Gdx.app.getGraphics().getHeight());
+        System.out.println("Height: " + background.getHeight());
 
     }
 
@@ -54,7 +55,6 @@ public class MainMenuState extends State {
     public void render(SpriteBatch sb) {
         sb.begin();
         sb.draw(background, 0, 0, background.getWidth(), background.getHeight());
-
         sb.end();
     }
     public void dispose(){
