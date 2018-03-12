@@ -7,7 +7,6 @@ import com.pbapp.core.PBApp;
 public class DesktopLauncher {
 
     /**
-     *
      * @param arg
      */
     public static void main (String[] arg) {
