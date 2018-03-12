@@ -1,4 +1,5 @@
-libGDXproject/core/build/*
-libGDXproject/desktop/build/*
-libGDXproject/android/build/*
-libGDXproject/local.properties
+/pbapp/core/nbproject/
+/pbapp/core/target/
+/pbapp/desktop/target/
+/server/nbproject/
+/server/target/
