@@ -1,7 +1,6 @@
 package com.pbapp.core;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
@@ -9,12 +8,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * @author Mike
  */
 public class MainMenuState extends State {
-    private Sprite background;
+    
+    private Texture background;
     public MainMenuState(GuiStateManager gsm) {
         super(gsm);
-        background = new Sprite(new Texture(Gdx.files.internal("TitleScreen.png")));
-        background.setPosition(0,0);
-        background.setSize(500,800);
+        background = new Texture("TitleScreen.png");
     }
 
     @Override
@@ -52,12 +50,12 @@ public class MainMenuState extends State {
     @Override
     public void render(SpriteBatch sb) {
         sb.begin();
-        sb.draw(background, 0, 0, background.getWidth(), background.getHeight());
+        sb.draw(background, 0, 0, PBApp.width, PBApp.height);
         sb.end();
     }
     public void dispose(){
         //remember to add all drawn objects to this method.
-        //'background.dispose();
+        background.dispose();
     }
     
 }
