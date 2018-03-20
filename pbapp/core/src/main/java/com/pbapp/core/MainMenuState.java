@@ -15,7 +15,6 @@ public class MainMenuState extends State {
         background = new Sprite(new Texture(Gdx.files.internal("TitleScreen.png")));
         background.setPosition(0,0);
         background.setSize(500,800);
-
     }
 
     @Override
@@ -54,7 +53,6 @@ public class MainMenuState extends State {
     public void render(SpriteBatch sb) {
         sb.begin();
         sb.draw(background, 0, 0, background.getWidth(), background.getHeight());
-
         sb.end();
     }
     public void dispose(){
