@@ -16,6 +16,17 @@
 	</properties>
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>com.google.android</groupId>
+				<artifactId>android</artifactId>
+				<version>4.1.1.4</version>
+			</dependency>
+			
+			<dependency>
+				<groupId>com.google.android</groupId>
+				<artifactId>android-test</artifactId>
+				<version>4.1.1.4</version>
+			</dependency>
 			<!-- core dependencies -->
 			<dependency>
 				<groupId>com.badlogicgames.gdx</groupId>
@@ -131,6 +142,17 @@
 					<target>1.6</target>
 				</configuration>
 			</plugin>
+			<plugin>
+          <groupId>com.simpligility.maven.plugins</groupId>
+
+          <artifactId>android-maven-plugin</artifactId>
+          <version>4.5.0</version>
+          <configuration>
+            <sdk>
+              <platform>20</platform>
+            </sdk>
+          </configuration>
+        </plugin>
 		</plugins>
 	</build>
 
