@@ -31,8 +31,6 @@ public class ShinemanMapState extends State {
         }
         
         if (Gdx.input.justTouched()) {
-            System.out.println("X: " + Gdx.input.getX());
-            System.out.println("y: " + Gdx.input.getY());
             
             boolean withinBackX = (Gdx.input.getX() >= 18) && (Gdx.input.getX() <= 65);
             boolean withinBackY = (Gdx.input.getY() >= 15) && (Gdx.input.getY() <= 68);

@@ -9,8 +9,8 @@ import com.badlogic.gdx.math.Vector2;
 public class MapSprite {
     private Vector2 position;
     private Texture map;
-    Vector2 xConstraints;
-    Vector2 yConstraints;
+    private Vector2 xConstraints;
+    private Vector2 yConstraints;
     
     public MapSprite(int x, int y, String fileName, int xHigh, int xLow, int yHigh, int yLow){
         position = new Vector2(x,y);
