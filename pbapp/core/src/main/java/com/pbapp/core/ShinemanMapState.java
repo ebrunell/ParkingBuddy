@@ -15,18 +15,32 @@ public class ShinemanMapState extends State {
     private Texture background;
     private Button backButton;
     private Button dataButton;
+    private MapSprite map;
     
     public ShinemanMapState(GuiStateManager gsm) {
         super(gsm);
         background = new Texture("ShinemanMap.png");
         backButton = new Button("BackButton.png", new Vector2(37,60), new Vector2(230,50));
         dataButton = new Button("DataButton.png", new Vector2(400, 60), new Vector2(230,50));
+        map = new MapSprite(0,PBApp.height,"ShinemanLotEditedMap.png",-200,-950,-190,-336);
     }
 
     @Override
     protected void handleInput() {
+        
+        if(Gdx.input.isTouched()){
+            int deltaX = Gdx.input.getDeltaX();
+            int deltaY = Gdx.input.getDeltaY();
+            map.update(new Vector2(deltaX, deltaY));
+        }
+        
         if (Gdx.input.justTouched()) {
            /* 
+=======
+            System.out.println("X: " + Gdx.input.getX());
+            System.out.println("y: " + Gdx.input.getY());
+            
+>>>>>>> 88b36afb97705fc5394d2ce158306b0a7a1705a1
             boolean withinBackX = (Gdx.input.getX() >= 18) && (Gdx.input.getX() <= 65);
             boolean withinBackY = (Gdx.input.getY() >= 15) && (Gdx.input.getY() <= 68);
             boolean withinDataX = (Gdx.input.getX() >= 381) && (Gdx.input.getX() <= 474);
@@ -59,6 +73,7 @@ public class ShinemanMapState extends State {
     @Override
     public void render(SpriteBatch sb) {
         sb.begin();
+        sb.draw(map.getTexture(), map.getXpos(), map.getYpos(),1650,1200);
         sb.draw(background, 0, 0, PBApp.width, PBApp.height);
         sb.draw(backButton.getTexture(), backButton.getXpos(), backButton.getYpos());
         sb.draw(dataButton.getTexture(), dataButton.getXpos(), dataButton.getYpos());
@@ -68,6 +83,7 @@ public class ShinemanMapState extends State {
     public void dispose() {
         //remember to add all drawn objects to this method.
         background.dispose();
+        map.getTexture().dispose();
     }
     
 }
