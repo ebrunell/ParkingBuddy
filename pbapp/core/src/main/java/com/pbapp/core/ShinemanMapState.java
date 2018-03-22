@@ -3,6 +3,7 @@ package com.pbapp.core;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.pbapp.core.PBApp;
 
 /**
@@ -12,22 +13,26 @@ import com.pbapp.core.PBApp;
 public class ShinemanMapState extends State {
     
     private Texture background;
+    private Button backButton;
+    private Button dataButton;
     
     public ShinemanMapState(GuiStateManager gsm) {
         super(gsm);
         background = new Texture("ShinemanMap.png");
+        backButton = new Button("BackButton.png", new Vector2(37,60), new Vector2(230,50));
+        dataButton = new Button("DataButton.png", new Vector2(400, 60), new Vector2(230,50));
     }
 
     @Override
     protected void handleInput() {
         if (Gdx.input.justTouched()) {
-            
+           /* 
             boolean withinBackX = (Gdx.input.getX() >= 18) && (Gdx.input.getX() <= 65);
             boolean withinBackY = (Gdx.input.getY() >= 15) && (Gdx.input.getY() <= 68);
             boolean withinDataX = (Gdx.input.getX() >= 381) && (Gdx.input.getX() <= 474);
             boolean withinDataY = (Gdx.input.getY() >= 12) && (Gdx.input.getY() <= 65);
-            
-            if (withinBackX && withinBackY) {
+            */
+            if (backButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
                 this.dispose();
                 gsm.pop();
                 MainMenuState m = new MainMenuState(gsm);
@@ -35,7 +40,7 @@ public class ShinemanMapState extends State {
                 
             }
             
-            if (withinDataX && withinDataY) {
+            if (dataButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
                 this.dispose();
                 gsm.pop();
                 ShinemanDataState sm = new ShinemanDataState(gsm);
@@ -55,6 +60,8 @@ public class ShinemanMapState extends State {
     public void render(SpriteBatch sb) {
         sb.begin();
         sb.draw(background, 0, 0, PBApp.width, PBApp.height);
+        sb.draw(backButton.getTexture(), backButton.getXpos(), backButton.getYpos());
+        sb.draw(dataButton.getTexture(), dataButton.getXpos(), dataButton.getYpos());
         sb.end();
     }
     

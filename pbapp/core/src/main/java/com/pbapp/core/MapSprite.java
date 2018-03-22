@@ -15,6 +15,11 @@ public class MapSprite {
         map = new Texture(fileName);
     }
     
+    public MapSprite(int x, int y){
+        position = new Vector2(x,y);
+        map = null;
+    }
+    
     public void update(Vector2 input){
         position.add(input);
     }
