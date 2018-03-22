@@ -18,7 +18,7 @@ public class SheldonMapState extends State {
     public SheldonMapState(GuiStateManager gsm) {
         super(gsm);
         background = new Texture("SheldonMap.png");
-        map = new MapSprite(PBApp.width/2,PBApp.height/2,"libgdx-logo.png");
+        map = new MapSprite(PBApp.width/2,PBApp.height/2,"SheldonLotEditedMap.png");
         
     }
 
@@ -63,7 +63,7 @@ public class SheldonMapState extends State {
     public void render(SpriteBatch sb) {
         sb.begin();
         sb.draw(background, 0, 0, PBApp.width, PBApp.height);
-        sb.draw(map.getTexture(), map.getXpos(), map.getYpos());
+        sb.draw(map.getTexture(), map.getXpos(), map.getYpos(),1300,800);
         sb.end();
     }
     
