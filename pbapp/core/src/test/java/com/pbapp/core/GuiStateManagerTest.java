@@ -1,21 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.pbapp.core;
 
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-/**
- *
- * @author Andrew Smith
- */
 public class GuiStateManagerTest {
     
     public GuiStateManagerTest() {
@@ -30,8 +17,7 @@ public class GuiStateManagerTest {
         GuiStateManager gsm = new GuiStateManager();
         DummyState s = new DummyState(gsm);
         gsm.push(s);
-        assertSame(s,gsm.pop());
-        assertNull(gsm.peek());
+        assertSame(s,gsm.peek());
     }
     
     /**

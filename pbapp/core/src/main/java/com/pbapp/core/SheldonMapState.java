@@ -18,7 +18,7 @@ public class SheldonMapState extends State {
     public SheldonMapState(GuiStateManager gsm) {
         super(gsm);
         background = new Texture("SheldonMap.png");
-        map = new MapSprite(PBApp.width/2,PBApp.height/2,"SheldonLotEditedMap.png");
+        map = new MapSprite(0,PBApp.height,"SheldonLotEditedMap.png");
         
     }
 

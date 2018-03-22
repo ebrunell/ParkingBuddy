@@ -24,19 +24,12 @@ public class MainMenuState extends State {
     @Override
     public void handleInput() {
         if(Gdx.input.justTouched()) {
-            /*
-            boolean withinSheldonX = (Gdx.input.getX() >= 70) && (Gdx.input.getX() <= 430);
-            boolean withinSheldonY = (Gdx.input.getY() <= 380) && (Gdx.input.getY() >= 300);
-            boolean withinShinemanX = (Gdx.input.getX() >= 70) && (Gdx.input.getX() <= 430);
-            boolean withinShinemanY = (Gdx.input.getY() <= 520) && (Gdx.input.getY() >= 430);
-            */
             if(ShinemanButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())){
                 gsm.setState(new ShinemanMapState(gsm));
             }
             if(SheldonButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())){
                 gsm.setState(new SheldonMapState(gsm));
             }
-            
         }
     }
 
