@@ -19,6 +19,11 @@ public class MapSprite {
         yConstraints = new Vector2(yHigh,yLow);
     }
     
+    public MapSprite(int x, int y){
+        position = new Vector2(x,y);
+        map = null;
+    }
+    
     public void update(Vector2 input){
         position.add(input);
         if(position.x > xConstraints.x) position.x = xConstraints.x;
