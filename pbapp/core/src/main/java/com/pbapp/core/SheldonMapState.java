@@ -12,12 +12,15 @@ import com.badlogic.gdx.math.Vector2;
 public class SheldonMapState extends State {
     
     private Texture background;
-    
+    private Button backButton;
+    private Button dataButton;
     private MapSprite map;
     
     public SheldonMapState(GuiStateManager gsm) {
         super(gsm);
         background = new Texture("SheldonMap.png");
+        backButton = new Button("BackButton.png", new Vector2(37,60), new Vector2(230,50));
+        dataButton = new Button("DataButton.png", new Vector2(400, 60), new Vector2(230,50));
         map = new MapSprite(0,PBApp.height,"SheldonLotEditedMap.png",0,-700,0,0);  
     }
 
@@ -31,19 +34,15 @@ public class SheldonMapState extends State {
         }
         
         if (Gdx.input.justTouched()) {
-            boolean withinBackX = (Gdx.input.getX() >= 18) && (Gdx.input.getX() <= 65);
-            boolean withinBackY = (Gdx.input.getY() >= 15) && (Gdx.input.getY() <= 68);
-            boolean withinDataX = (Gdx.input.getX() >= 381) && (Gdx.input.getX() <= 474);
-            boolean withinDataY = (Gdx.input.getY() >= 12) && (Gdx.input.getY() <= 65);
             
-            if (withinBackX && withinBackY) {
+            if (backButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
                 //System.out.println("back");
                 this.dispose();
                 gsm.pop();
                 MainMenuState m = new MainMenuState(gsm);
                 gsm.push(m);
                 
-            }else if (withinDataX && withinDataY) {
+            }else if (dataButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
                 //System.out.println("Data");
                 this.dispose();
                 gsm.pop();
@@ -62,6 +61,8 @@ public class SheldonMapState extends State {
     public void render(SpriteBatch sb) {
         sb.begin();
         sb.draw(background, 0, 0, PBApp.width, PBApp.height);
+        sb.draw(backButton.getTexture(), backButton.getXpos(), backButton.getYpos());
+        sb.draw(dataButton.getTexture(), dataButton.getXpos(), dataButton.getYpos());
         sb.draw(map.getTexture(), map.getXpos(), map.getYpos(),1200,717);
         sb.end();
     }
