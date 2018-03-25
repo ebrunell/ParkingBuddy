@@ -50,6 +50,7 @@ public class ShinemanDataState extends State {
     @Override
     public void handleInput() {
         //TODO: find x and y for back button and data button
+        //TODO: Handle unexpected disconnects
         if (Gdx.input.justTouched()) {
             
             if (backButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
