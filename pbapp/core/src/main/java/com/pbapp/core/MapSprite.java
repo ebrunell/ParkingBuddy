@@ -23,6 +23,13 @@ public class MapSprite {
         position = new Vector2(x,y);
         map = null;
     }
+
+    MapSprite(int x, int y, int xHigh, int xLow, int yHigh, int yLow) {
+        position = new Vector2(x,y);
+        map = null;
+        xConstraints = new Vector2(xHigh,xLow);
+        yConstraints = new Vector2(yHigh, yLow);
+    }
     
     public void update(Vector2 input){
         position.add(input);
