@@ -5,6 +5,7 @@
  */
 package com.pbapp.core;
 
+import com.badlogic.gdx.math.Vector2;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -32,6 +33,24 @@ public class MapSpriteTest {
      */
     @Test
     public void testUpdate() {
+        System.out.println("Update");
+        MapSprite ms = new MapSprite(5,7,-200,-950,-190,-336);
+        Vector2 input = new Vector2(3,3);
+        ms.update(input);
+        assertEquals(-200,ms.getXpos());
+        assertEquals(-190, ms.getYpos());
+        input.x = -800;
+        input.y = 1200;
+        ms.update(input);
+        assertEquals(-950,ms.getXpos());
+        assertEquals(-336,ms.getYpos());
+        input.x = 50;
+        input.y = -36;
+        ms.update(input);
+        assertEquals(-900,ms.getXpos());
+        System.out.println(ms.getYpos());
+        assertEquals(-300,ms.getYpos());
+        
     }
 
     /**
@@ -39,9 +58,10 @@ public class MapSpriteTest {
      */
     @Test
     public void testGetXYpos() {
-        MapSprite ms = new MapSprite(5,1);
+        System.out.println("GetXYpos");
+        MapSprite ms = new MapSprite(5,7,10,2,15,3);
         assertEquals(5, ms.getXpos());
-        assertEquals(PBApp.height - 1, ms.getYpos());
+        assertEquals(PBApp.height - 7, ms.getYpos());
     }
 
 
