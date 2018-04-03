@@ -17,6 +17,12 @@ public class Button {
         dimensions = d;
     }
     
+    public Button(Vector2 p, Vector2 d){
+        image = null;
+        position = p;
+        dimensions = d;
+    }
+    
     public boolean wasTouched(int x, int y){
         Boolean withinY = (y < position.y) && (y > (position.y-dimensions.y));
         Boolean withinX = (x > position.x) && (x < (position.x+dimensions.x));
@@ -36,5 +42,13 @@ public class Button {
         realPos -= (int)position.y;
         
         return realPos;
+    }
+    
+    public int getWidth(){
+        return (int)dimensions.x;
+    }
+    
+    public int getHeight(){
+        return (int)dimensions.y;
     }
 }
