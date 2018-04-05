@@ -31,6 +31,11 @@ public class ShinemanMapState extends State {
         spaces[1] = new ParkingSpaceButton("2", new Vector2(280, 230), new Vector2(17,50));
         spaces[2] = new ParkingSpaceButton("3", new Vector2(298, 218), new Vector2(17,53));
         spaces[3] = new ParkingSpaceButton("4", new Vector2(317, 205), new Vector2(17,53));
+        spaces[4] = new ParkingSpaceButton("5", new Vector2(340,195), new Vector2(17,53));
+        spaces[5] = new ParkingSpaceButton("6", new Vector2(365,178), new Vector2(17,53));
+        spaces[6] = new ParkingSpaceButton("7", new Vector2(395, 161), new Vector2(17,53));
+        spaces[7] = new ParkingSpaceButton("8", new Vector2(424,144), new Vector2(17,53));
+        spaces[8] = new ParkingSpaceButton("9", new Vector2(449,129), new Vector2(17,53));
         sr = new ShapeRenderer();
     }
 
@@ -91,6 +96,16 @@ public class ShinemanMapState extends State {
                 map.getYpos(), spaces[2].getWidth(), spaces[2].getHeight(), 0, 0, 20f);
         sr.rect(spaces[3].getXpos() + map.getXpos(), spaces[3].getYpos() + 
                 map.getYpos(), spaces[3].getWidth(), spaces[3].getHeight(), 0, 0, 18f);
+        sr.rect(spaces[4].getXpos() + map.getXpos(), spaces[4].getYpos() + 
+                map.getYpos(), spaces[4].getWidth(), spaces[4].getHeight(), 0, 0, 20f);
+        sr.rect(spaces[5].getXpos() + map.getXpos(), spaces[5].getYpos() + 
+                map.getYpos(), spaces[5].getWidth(), spaces[5].getHeight(), 0, 0, 20f);
+        sr.rect(spaces[6].getXpos() + map.getXpos(), spaces[6].getYpos() + 
+                map.getYpos(), spaces[6].getWidth(), spaces[6].getHeight(), 0, 0, 23f);
+        sr.rect(spaces[7].getXpos() + map.getXpos(), spaces[7].getYpos() + 
+                map.getYpos(), spaces[7].getWidth(), spaces[7].getHeight(), 0, 0, 23f);
+        sr.rect(spaces[8].getXpos() + map.getXpos(), spaces[8].getYpos() + 
+                map.getYpos(), spaces[8].getWidth(), spaces[8].getHeight(), 0, 0, 23f);
         sr.end();
     }
     
