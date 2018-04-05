@@ -11,9 +11,11 @@ import com.badlogic.gdx.math.Vector2;
  *
  * @author Andrew Smith
  */
-public class ParkingSpaceButton extends Button{
+public class ParkingSpaceButton extends Button {
     private String identifier;
     
+    // p is position on map
+    // d is dimension
     public ParkingSpaceButton(String id, Vector2 p, Vector2 d) {
         super(p, d);
         identifier = id;
