@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.pbapp.core.PBApp;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -12,8 +11,6 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -21,17 +18,17 @@ import java.util.logging.Logger;
  */
 public class ShinemanDataState extends State {
     
-     private Texture background;
-     private Button backButton;
-     private Button serverButton;
-     private Texture connectionEstablished;
-     private Boolean messageRecieved;
-     private String port;
-     private Socket s;
-     private ObjectOutputStream o;
-     private ObjectInputStream i;
-     private InetAddress address;
-     String host;
+    private Texture background;
+    private Button backButton;
+    private Button serverButton;
+    private Texture connectionEstablished;
+    private Boolean messageRecieved;
+    private String port;
+    private Socket s;
+    private ObjectOutputStream o;
+    private ObjectInputStream i;
+    private InetAddress address;
+    String host;
      
      
     public ShinemanDataState(GuiStateManager gsm) {
@@ -70,7 +67,7 @@ public class ShinemanDataState extends State {
                         System.out.println("Failed to intialize socket/streams");
                         ex.printStackTrace();
                         System.exit(1);
-                    }catch(ClassNotFoundException ex){
+                    } catch (ClassNotFoundException ex){
                         System.out.println("Object recieved was not string");
                         ex.printStackTrace();
                         System.exit(1);
@@ -136,6 +133,4 @@ public class ShinemanDataState extends State {
         //remember to add all drawn objects to this method.
         background.dispose();
     }
-    
-    
 }

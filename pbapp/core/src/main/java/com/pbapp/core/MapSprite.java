@@ -8,9 +8,9 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class MapSprite {
     private Vector2 position;
-    private Texture map;
-    private Vector2 xConstraints;
-    private Vector2 yConstraints;
+    private final Texture map;
+    private final Vector2 xConstraints;
+    private final Vector2 yConstraints;
     
     public MapSprite(int x, int y, String fileName, int xHigh, int xLow, int yHigh, int yLow){
         position = new Vector2(x,y);
@@ -19,12 +19,7 @@ public class MapSprite {
         yConstraints = new Vector2(yHigh,yLow);
     }
     
-    public MapSprite(int x, int y){
-        position = new Vector2(x,y);
-        map = null;
-    }
-
-    MapSprite(int x, int y, int xHigh, int xLow, int yHigh, int yLow) {
+    public MapSprite(int x, int y, int xHigh, int xLow, int yHigh, int yLow) {
         position = new Vector2(x,y);
         map = null;
         xConstraints = new Vector2(xHigh,xLow);
@@ -54,5 +49,4 @@ public class MapSprite {
     public Texture getTexture() {
         return map;
     }
-    
 }
