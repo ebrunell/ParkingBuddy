@@ -13,7 +13,7 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class ParkingSpaceButton extends Button {
     private String identifier;
-    
+    private float tilt;
     // p is position on map
     // d is dimension
     public ParkingSpaceButton(String id, Vector2 p, Vector2 d) {
@@ -21,8 +21,18 @@ public class ParkingSpaceButton extends Button {
         identifier = id;
     }
     
+    public ParkingSpaceButton(String id, Vector2 p, Vector2 d, float t) {
+        super(p, d);
+        identifier = id;
+        tilt = t;
+    }
+    
     public String getIdentifier(){
         return identifier;
+    }
+    
+    public float getTilt(){
+        return tilt;
     }
 
 }
