@@ -2,17 +2,21 @@ package com.mygdx.pbServer;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
-/**
- * @author Mike
- */
-//SERVER: A multi-threaded server to accept client connections
+//MULTITHREADSERVER: A multi-threaded server to accept client connections
 public class MultiThreadServer {
-    public static void main(String args[]) throws IOException {
+    public static void main(String args[]){
+        
+        //TODO: load with actual identifiers
+        String [] spaces = {"a","b","c"};
+        ParkingLot shineman = new ParkingLot(spaces);
+        ParkingLot sheldon = new ParkingLot(spaces);
+        
 	//Displays local server information
         int port;
         if(args.length == 0){
@@ -30,14 +34,21 @@ public class MultiThreadServer {
         }else{
             port = Integer.parseInt(args[0]);
         }
-	ServerSocket s = new ServerSocket(port);
-	for(;;) {
-	    //waits for a connection and then passes the socket to a new connection
-	    //thread
-	    Socket client = s.accept();
-	    System.out.println(client.getInetAddress().getHostName() + " just connected.");
-	    new Thread(new ConnectionThread(client)).start();
-	    //TODO: add connection threads to a collection of some sort?
-	}
+	ServerSocket s;
+        try {
+            s = new ServerSocket();
+            s.bind(new InetSocketAddress(InetAddress.getLocalHost().getHostAddress(), port));
+            for(;;) {
+                //waits for a connection and then passes the socket to a new connection
+                //thread
+                Socket client = s.accept();
+                System.out.println(client.getInetAddress().getHostName() + " just connected.");
+                new Thread(new ConnectionThread(client,shineman,sheldon)).start();
+                //TODO: add connection threads to a collection of some sort?
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            System.exit(-1);
+        }
     }
 }
