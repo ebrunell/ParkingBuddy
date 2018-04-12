@@ -15,20 +15,34 @@ import com.badlogic.gdx.math.Vector2;
 public class SheldonMapState extends State {
 
     private Texture background;
+    private Texture popUpBackground;
     private Button backButton;
     private Button dataButton;
+    private Button emptySpaceButton;
+    private Button fillSpaceButton;
+    private Button obstructedButton;
+    private Button setTimerButton;
     private MapSprite map;
     private ParkingSpaceButton[] spaces;
     private ShapeRenderer sr;
+    public boolean spacePressed;
+    public String spaceId;
 
     public SheldonMapState(GuiStateManager gsm) {
         super(gsm);
         background = new Texture("SheldonMap.png");
+        popUpBackground = new Texture("popUp.png");
         backButton = new Button("BackButton.png", new Vector2(37, 60), new Vector2(230, 50));
         dataButton = new Button("DataButton.png", new Vector2(400, 60), new Vector2(230, 50));
+        emptySpaceButton = new Button("emptySpace.png", new Vector2(75, 405), new Vector2(100, 100));
+        fillSpaceButton = new Button("fillSpace.png", new Vector2(275, 405), new Vector2(100, 100));
+        obstructedButton = new Button("obstructed.png", new Vector2(75, 475), new Vector2(100, 100));
+        setTimerButton = new Button("setTimer.png", new Vector2(275, 475), new Vector2(100, 130));
         map = new MapSprite(0, PBApp.height, "SheldonLotEditedMap.png", 0, -700, 0, 0);
         spaces = new ParkingSpaceButton[67];
         sr = new ShapeRenderer();
+        spacePressed = false;
+        
 
         //generating first 22 parking space buttons (top row)
         spaces[0] = new ParkingSpaceButton("1", new Vector2(45, 270), new Vector2(45, 120));
@@ -71,21 +85,20 @@ public class SheldonMapState extends State {
                 x4 = x4 + 51;
             }
         }
-        
+
         //generating third row of parking spaces #46-66
         //spaces[45] = new ParkingSpaceButton("46",new Vector2(52,730), new Vector2(40,136));
         int x5 = 52;
         int j5 = 46;
         int y2 = 730;
         for (int i = 45; i < 67; i++) {
-            System.out.println(j5);
-            spaces[i] = new ParkingSpaceButton(Integer.toString(j5), new Vector2(x5, y2), new Vector2(40,136));
+            spaces[i] = new ParkingSpaceButton(Integer.toString(j5), new Vector2(x5, y2), new Vector2(40, 136));
             j5++;
             y2--;
             x5 = x5 + 51;
-            
+
         }
-        
+
     }
 
     @Override
@@ -95,6 +108,12 @@ public class SheldonMapState extends State {
             int deltaX = Gdx.input.getDeltaX();
             int deltaY = Gdx.input.getDeltaY();
             map.update(new Vector2(deltaX, deltaY));
+            for (ParkingSpaceButton psb : spaces) {
+                if (deltaX != 0 && deltaY != 0) {
+                    //psb.update(map.getXpos(),map.getYpos());
+                    psb.update(map.getXpos(), map.getYpos());
+                }
+            }
         }
 
         if (Gdx.input.justTouched()) {
@@ -112,6 +131,29 @@ public class SheldonMapState extends State {
                 gsm.pop();
                 SheldonDataState sd = new SheldonDataState(gsm);
                 gsm.push(sd);
+            }
+
+            for (ParkingSpaceButton space : spaces) {
+                if (space.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                    spacePressed = true;
+                    spaceId = space.getIdentifier();
+                    //System.out.println(spaceId);
+                }
+            }
+            
+            if (spacePressed) {
+                if (fillSpaceButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                    System.out.println("Fill Space");
+                    System.out.println(spaceId);
+                    spacePressed = false;
+                } else if (emptySpaceButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                    System.out.println("Empty Space");
+                } else if (obstructedButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                    System.out.println("Obstructed");
+                } else if (setTimerButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                    System.out.println("Set Timer");
+                }
+
             }
         }
     }
@@ -131,15 +173,27 @@ public class SheldonMapState extends State {
         sb.end();
         sr.begin(ShapeRenderer.ShapeType.Filled);
         Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND); //activate transparency
-        sr.setColor(new Color(0,255,0,0.4f));
+        sr.setColor(new Color(0, 255, 0, 0.4f));
         //generating parking spaces
         for (int i = 0; i < spaces.length; i++) {
             if (spaces[i] != null) {
-                sr.rect(spaces[i].getXpos() + map.getXpos(), spaces[i].getYpos()
-                        + map.getYpos(), spaces[i].getWidth(), spaces[i].getHeight(), 0, 0, 0f);
+                sr.rect(spaces[i].getXpos(), spaces[i].getYpos(), spaces[i].getWidth(), spaces[i].getHeight(), 0, 0, 0f);
             }
         }
         sr.end();
+        if (spacePressed == true) {
+            sb.begin();
+            sb.draw(popUpBackground, 50, 300);
+            sb.end();
+
+            sb.begin();
+            sb.draw(emptySpaceButton.getTexture(), emptySpaceButton.getXpos(), emptySpaceButton.getYpos());
+            sb.draw(fillSpaceButton.getTexture(), fillSpaceButton.getXpos(), fillSpaceButton.getYpos());
+            sb.draw(obstructedButton.getTexture(), obstructedButton.getXpos(), obstructedButton.getYpos());
+            sb.draw(setTimerButton.getTexture(), setTimerButton.getXpos(), setTimerButton.getYpos());
+            sb.end();
+
+        }
     }
 
     public void dispose() {
