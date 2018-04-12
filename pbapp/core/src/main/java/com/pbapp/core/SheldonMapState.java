@@ -1,6 +1,8 @@
 package com.pbapp.core;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -128,7 +130,8 @@ public class SheldonMapState extends State {
         sb.draw(map.getTexture(), map.getXpos(), map.getYpos(), 1200, 717);
         sb.end();
         sr.begin(ShapeRenderer.ShapeType.Filled);
-
+        Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND); //activate transparency
+        sr.setColor(new Color(0,255,0,0.4f));
         //generating parking spaces
         for (int i = 0; i < spaces.length; i++) {
             if (spaces[i] != null) {
