@@ -24,7 +24,7 @@ public class ShinemanMapState extends State {
         backButton = new Button("BackButton.png", new Vector2(37, 60), new Vector2(230, 50));
         dataButton = new Button("DataButton.png", new Vector2(400, 60), new Vector2(230, 50));
         map = new MapSprite(0, PBApp.height, "ShinemanLotEditedMap.png", -200, -950, -190, -336);
-        spaces = new ParkingSpaceButton[200];
+        spaces = new ParkingSpaceButton[231];
         spaces[0] = new ParkingSpaceButton("1", new Vector2(260, 238), new Vector2(17, 50), 23f);
         spaces[1] = new ParkingSpaceButton("2", new Vector2(280, 230), new Vector2(17, 50), 23f);
         spaces[2] = new ParkingSpaceButton("3", new Vector2(298, 218), new Vector2(17, 53), 20f);
@@ -36,12 +36,16 @@ public class ShinemanMapState extends State {
         spaces[8] = new ParkingSpaceButton("9", new Vector2(449, 129), new Vector2(17, 53), 23f);
         spaces[9] = new ParkingSpaceButton("10", new Vector2(478, 112), new Vector2(17, 53), 24f);
         spaces[10] = new ParkingSpaceButton("11", new Vector2(523, 83), new Vector2(17, 53), 23f);
+        spaces[11] = new ParkingSpaceButton("12", new Vector2(545, 70), new Vector2(17, 53), 23f);
+        spaces[12] = new ParkingSpaceButton("13", new Vector2(585, 45), new Vector2(17, 53), 23f);
+        spaces[13] = new ParkingSpaceButton("14", new Vector2(605, 35), new Vector2(17, 53), 23f);
+        spaces[14] = new ParkingSpaceButton("15", new Vector2(644, 7), new Vector2(17, 53), 23f);
+        spaces[15] = new ParkingSpaceButton("16", new Vector2(666, -7), new Vector2(17, 53), 23f);
+        spaces[16] = new ParkingSpaceButton("17", new Vector2(708, -29), new Vector2(17, 53), 23f);
 
         spaces[17] = new ParkingSpaceButton("18", new Vector2(280, 390), new Vector2(17, 43), 90f);
-        //spaces 19 to 23 are handled with the following for loop
-
         int x1 = 280;
-        int y1 = 390;//+ 28
+        int y1 = 390;
         float t1 = 0f;
         for (int i = 18; i < 23; i++) {
             y1 = y1 + 28;
@@ -52,7 +56,6 @@ public class ShinemanMapState extends State {
         spaces[23] = new ParkingSpaceButton("24", new Vector2(286, 609), new Vector2(17, 53), 0f);
         x1 = 286;
         y1 = 609;
-        //spaces 25 to 45 
         for (int i = 24; i < 45; i++) {
             x1 = x1 + 22;
             y1 = y1 - 1;
@@ -66,38 +69,33 @@ public class ShinemanMapState extends State {
         }
 
         spaces[45] = new ParkingSpaceButton("46", new Vector2(835, 518), new Vector2(17, 45), 90f);
-        //spaces[46] = new ParkingSpaceButton("47", new Vector2(835,490), new Vector2(17,45), 90f);
         x1 = 835;
         y1 = 518;
         for (int i = 46; i < 62; i++) {
             y1 = y1 - 28;
             if (i % 2 == 0) {
                 x1 = x1 - 2;
-
             }
             if (i % 3 == 0) {
                 y1 = y1 - 2;
             }
-
             spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(17, 45), 90f);
         }
 
         spaces[62] = new ParkingSpaceButton("63", new Vector2(380, 320), new Vector2(17, 43), 90f);
         x1 = 380;
         y1 = 320;
-        //for spaces 65 to 71 odd
         for (int i = 64; i < 71; i = i + 2) {
             y1 = y1 + 30;
             spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(17, 43), 90f);
         }
+
         spaces[63] = new ParkingSpaceButton("64", new Vector2(428, 319), new Vector2(17, 43), 90f);
         x1 = 428;
         y1 = 319;
-        //for spaces 66 to 72 even
         for (int i = 65; i < 72; i = i + 2) {
             y1 = y1 + 28;
             if (i == 69) {
-                //System.out.println("i is 69");
                 y1 = y1 + 4;
             }
             spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(17, 43), 90f);
@@ -106,30 +104,156 @@ public class ShinemanMapState extends State {
         spaces[72] = new ParkingSpaceButton("73", new Vector2(524, 227), new Vector2(17, 43), 90f);
         x1 = 524;
         y1 = 227;
-        //for spaces 75 to 87 odd
         for (int i = 74; i < 87; i = i + 2) {
             y1 = y1 + 28;
             x1 = x1 + 1;
             if (i == 84 || i == 86) {
                 y1 = y1 + 2;
             }
-
             spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(17, 43), 90f);
         }
-        
-        spaces[73] = new ParkingSpaceButton("76", new Vector2(574, 225), new Vector2(17,43), 90f);
-        //spaces[75] = new ParkingSpaceButton("78", new Vector2(574, 253), new Vector2(17,43), 90f);
+
+        spaces[73] = new ParkingSpaceButton("76", new Vector2(574, 225), new Vector2(17, 43), 90f);
         x1 = 574;
         y1 = 225;
-        //for spaces 76 to 88 even
         for (int i = 75; i < 88; i = i + 2) {
             y1 = y1 + 28;
             x1 = x1 + 1;
             if (i == 83 || i == 85) {
                 y1 = y1 + 2;
             }
-
             spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(17, 43), 90f);
+        }
+
+        spaces[88] = new ParkingSpaceButton("89", new Vector2(673, 128), new Vector2(19, 43), 90f);
+        x1 = 673;
+        y1 = 128;
+        for (int i = 90; i < 109; i = i + 2) {
+            y1 = y1 + 29;
+            x1 = x1 + 1;
+            if (i == 97 || i == 99) {
+                y1 = y1 + 2;
+            }
+            spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(19, 43), 90f);
+        }
+
+        spaces[89] = new ParkingSpaceButton("90", new Vector2(723, 128), new Vector2(19, 43), 90f);
+        x1 = 723;
+        y1 = 128;
+        for (int i = 91; i < 110; i = i + 2) {
+            y1 = y1 + 29;
+            x1 = x1 + 1;
+            spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(19, 43), 90f);
+        }
+
+        spaces[110] = new ParkingSpaceButton("111", new Vector2(968, -97), new Vector2(19, 46), 0f);
+        x1 = 968;
+        y1 = -97;
+        for (int i = 111; i < 127; i++) {
+            x1 = x1 + 25;
+            y1 = y1 - 1;
+            if (i == 112 || i == 114) {
+                x1 = x1 + 7;
+            }
+            if (i >= 16) {
+                x1 = x1 - 1;
+                if (i % 4 == 0) {
+                    x1 = x1 - 2;
+                    y1 = y1 - 2;
+                }
+            }
+            spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(19, 46), 0f);
+        }
+
+        spaces[128] = new ParkingSpaceButton("129", new Vector2(1424, -97), new Vector2(19, 43), 90f);
+        x1 = 1424;
+        y1 = -97;
+        for (int i = 129; i < 145; i++) {
+            x1 = x1 + 1;
+            y1 = y1 + 29;
+            if (i % 3 == 0) {
+                y1 = y1 + 1;
+            }
+            if (i == 144) {
+                x1 = x1 + 2;
+            }
+            spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(19, 43), 90f);
+        }
+
+        spaces[145] = new ParkingSpaceButton("146", new Vector2(1447, 425), new Vector2(19, 43), 90f);
+        x1 = 1447;
+        y1 = 425;
+        for (int i = 146; i < 148; i++) {
+            x1 = x1 + 1;
+            y1 = y1 + 29;
+            spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(19, 43), 90f);
+        }
+
+        spaces[149] = new ParkingSpaceButton("150", new Vector2(1132, 563), new Vector2(19, 47), 0f);
+        x1 = 1132;
+        y1 = 563;
+        for (int i = 150; i < 161; i++) {
+            x1 = x1 + 23;
+            y1 = y1 - 1;
+            if (i % 3 == 0) {
+                y1 = y1 - 1;
+                x1 = x1 + 1;
+
+            }
+            spaces[i] = new ParkingSpaceButton("151", new Vector2(x1, y1), new Vector2(19, 47), 0f);
+        }
+
+        spaces[160] = new ParkingSpaceButton("161", new Vector2(1019, 41), new Vector2(17, 44), 90f);
+        x1 = 1019;
+        y1 = 44;
+        for (int i = 161; i < 179; i++) {
+            y1 = y1 + 29;
+            x1 = x1 + 1;
+            spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(17, 44), 90f);
+        }
+
+        spaces[179] = new ParkingSpaceButton("179", new Vector2(1121, 39), new Vector2(17, 44), 90f);
+        x1 = 1121;
+        y1 = 39;
+        for (int i = 180; i < 192; i++) {
+            x1 = x1 + 1;
+            y1 = y1 + 29;
+            spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(17, 44), 90f);
+        }
+
+        spaces[192] = new ParkingSpaceButton("193", new Vector2(1170, 39), new Vector2(17, 44), 90f);
+        x1 = 1170;
+        y1 = 39;
+        for (int i = 193; i < 205; i++) {
+            x1 = x1 + 1;
+            y1 = y1 + 29;
+            spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(17, 44), 90f);
+        }
+
+        spaces[205] = new ParkingSpaceButton("205", new Vector2(1272, 29), new Vector2(17, 44), 90f);
+        x1 = 1272;
+        y1 = 29;
+        for (int i = 206; i < 218; i++) {
+            x1 = x1 + 1;
+            y1 = y1 + 29;
+            if (i % 3 == 0) {
+                x1 = x1 + 1;
+                y1 = y1 + 1;
+            }
+            spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(17, 44), 90f);
+        }
+
+        spaces[218] = new ParkingSpaceButton("218", new Vector2(1325, 27), new Vector2(17, 44), 90f);
+        x1 = 1325;
+        y1 = 27;
+        for (int i = 219; i < 231; i++) {
+            x1 = x1 + 1;
+            y1 = y1 + 29;
+            if (i % 3 == 0) {
+                x1 = x1 + 1;
+                y1 = y1 + 1;
+            }
+            spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(17, 44), 90f);
         }
         sr = new ShapeRenderer();
     }
@@ -174,10 +298,8 @@ public class ShinemanMapState extends State {
     public void render(SpriteBatch sb) {
         sb.begin();
         sb.draw(map.getTexture(), map.getXpos(), map.getYpos(), 1650, 1200);
-        sb.draw(background, 0, 0, PBApp.width, PBApp.height);
-        sb.draw(backButton.getTexture(), backButton.getXpos(), backButton.getYpos());
-        sb.draw(dataButton.getTexture(), dataButton.getXpos(), dataButton.getYpos());
         sb.end();
+
         sr.begin(ShapeRenderer.ShapeType.Filled);
 
         // 0,0 because we already specify the origin when creating the spaces[i]
@@ -189,8 +311,12 @@ public class ShinemanMapState extends State {
             }
 
         }
-
         sr.end();
+        sb.begin();
+        sb.draw(background, 0, 0, PBApp.width, PBApp.height);
+        sb.draw(backButton.getTexture(), backButton.getXpos(), backButton.getYpos());
+        sb.draw(dataButton.getTexture(), dataButton.getXpos(), dataButton.getYpos());
+        sb.end();
     }
 
     public void dispose() {
