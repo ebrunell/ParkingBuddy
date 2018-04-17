@@ -181,7 +181,7 @@ public class SheldonMapState extends State {
             }
         }
         sr.end();
-        if (spacePressed == true) {
+        if (spacePressed) {
             sb.begin();
             sb.draw(popUpBackground, 50, 300);
             sb.end();
