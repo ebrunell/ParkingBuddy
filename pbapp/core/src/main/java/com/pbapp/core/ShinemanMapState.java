@@ -311,6 +311,21 @@ public class ShinemanMapState extends State {
                 }
                 
             }
+            
+            if (spacePressed) {
+                if (fillSpaceButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                    System.out.println("Fill Space");
+                    System.out.println(spaceID);
+                    spacePressed = false;
+                } else if (emptySpaceButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                    System.out.println("Empty Space");
+                } else if (obstructedButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                    System.out.println("Obstructed");
+                } else if (setTimerButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                    System.out.println("Set Timer");
+                }
+
+            }
 
         }
     }
