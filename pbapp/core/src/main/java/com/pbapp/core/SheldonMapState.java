@@ -7,6 +7,15 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -25,6 +34,14 @@ public class SheldonMapState extends State {
     private MapSprite map;
     private ParkingSpaceButton[] spaces;
     private ShapeRenderer sr;
+    private Boolean messageRecieved;
+    private String port;
+    private Socket s;
+    private ObjectOutputStream o;
+    private ObjectInputStream i;
+    private InetAddress address;
+    String host;
+    String lotName;
     public boolean spacePressed;
     public String spaceId;
 
@@ -42,7 +59,41 @@ public class SheldonMapState extends State {
         spaces = new ParkingSpaceButton[67];
         sr = new ShapeRenderer();
         spacePressed = false;
-        
+        port = "2525";
+        lotName = "Sheldon";
+        messageRecieved = false;
+        s = null;
+        o = null;
+        i = null;
+
+        try {
+            address = InetAddress.getLocalHost();
+            host = address.getHostAddress();
+            s = new Socket(host, Integer.parseInt(port));
+            o = new ObjectOutputStream(s.getOutputStream());
+            o.flush();
+            i = new ObjectInputStream(s.getInputStream());
+
+            String response = "";
+            while (response.equals("")) {
+                response = (String) i.readObject();
+            }
+            messageRecieved = true;
+
+        } catch (EOFException eof) {
+            System.out.println("Connection terminated.");
+        } catch (UnknownHostException ex) {
+            System.out.println("Unable to identify local host");
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            System.out.println("Failed to initialize socket/streams");
+            ex.printStackTrace();
+            System.exit(1);
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Object recieved was not string");
+            ex.printStackTrace();
+            System.exit(1);
+        }
 
         //generating first 22 parking space buttons (top row)
         spaces[0] = new ParkingSpaceButton("1", new Vector2(45, 270), new Vector2(45, 120));
@@ -119,7 +170,28 @@ public class SheldonMapState extends State {
         if (Gdx.input.justTouched()) {
 
             if (backButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                //System.out.println("back");
+                if (s != null) {
+                    try {
+                        o.writeObject("exit");
+                        o.flush();
+                        String response = "";
+                        while (response.equals("")) {
+                            response = (String) i.readObject();
+                        }
+                        System.out.println(response);
+                        i.close();
+                        o.close();
+                        s.close();
+                    } catch (IOException ex) {
+                        System.out.println("Failed to intialize socket/streams");
+                        ex.printStackTrace();
+                        System.exit(1);
+                    } catch (ClassNotFoundException ex) {
+                        System.out.println("Object recieved was not string");
+                        ex.printStackTrace();
+                        System.exit(1);
+                    }
+                }
                 this.dispose();
                 gsm.pop();
                 MainMenuState m = new MainMenuState(gsm);
@@ -140,18 +212,44 @@ public class SheldonMapState extends State {
                     //System.out.println(spaceId);
                 }
             }
-            
+
+            //id,lotname,cmd(fil,obs,opn,chk),data
             if (spacePressed) {
                 if (fillSpaceButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    System.out.println("Fill Space");
-                    System.out.println(spaceId);
+                    if (messageRecieved) {
+                        try {
+                            o.writeObject(spaceId + " " + lotName + " fil " + 0);
+                            o.flush();
+                        } catch (IOException ex) {
+                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
                     spacePressed = false;
                 } else if (emptySpaceButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    System.out.println("Empty Space");
+                    if (messageRecieved) {
+                        try {
+                            o.writeObject(spaceId + " " + lotName + " opn " + 0);
+                            o.flush();
+                        } catch (IOException ex) {
+                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    spacePressed = false;
                 } else if (obstructedButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    System.out.println("Obstructed");
+                    if (messageRecieved) {
+                        try {
+                            o.writeObject(spaceId + " " + lotName + " obs " + 0);
+                            o.flush();
+                        } catch (IOException ex) {
+                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+                    spacePressed = false;
                 } else if (setTimerButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    System.out.println("Set Timer");
+                    if (messageRecieved) {
+                        System.out.println("Set Timer");
+                    }
+                    spacePressed = false;
                 }
 
             }
