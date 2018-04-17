@@ -13,18 +13,33 @@ public class ShinemanMapState extends State {
 
     private ShapeRenderer sr;
     private Texture background;
+    private Texture popUpBackground;
     private Button backButton;
     private Button dataButton;
+    private Button emptySpaceButton;
+    private Button fillSpaceButton;
+    private Button obstructedButton;
+    private Button setTimerButton;
     private MapSprite map;
     private ParkingSpaceButton[] spaces;
+    public boolean spacePressed;
+    public String spaceID;
 
     public ShinemanMapState(GuiStateManager gsm) {
         super(gsm);
         background = new Texture("ShinemanMap.png");
+        popUpBackground = new Texture("popUp.png");
         backButton = new Button("BackButton.png", new Vector2(37, 60), new Vector2(230, 50));
         dataButton = new Button("DataButton.png", new Vector2(400, 60), new Vector2(230, 50));
+        emptySpaceButton = new Button("emptySpace.png", new Vector2(75, 405), new Vector2(100, 100));
+        fillSpaceButton = new Button("fillSpace.png", new Vector2(275, 405), new Vector2(100, 100));
+        obstructedButton = new Button("obstructed.png", new Vector2(75, 475), new Vector2(100, 100));
+        setTimerButton = new Button("setTimer.png", new Vector2(275, 475), new Vector2(100, 130));
         map = new MapSprite(0, PBApp.height, "ShinemanLotEditedMap.png", -200, -950, -190, -336);
-        spaces = new ParkingSpaceButton[231];
+        spacePressed = false;
+        spaceID = "None";
+        
+        spaces = new ParkingSpaceButton[232];
         spaces[0] = new ParkingSpaceButton("1", new Vector2(260, 238), new Vector2(17, 50), 23f);
         spaces[1] = new ParkingSpaceButton("2", new Vector2(280, 230), new Vector2(17, 50), 23f);
         spaces[2] = new ParkingSpaceButton("3", new Vector2(298, 218), new Vector2(17, 53), 20f);
@@ -200,40 +215,40 @@ public class ShinemanMapState extends State {
                 x1 = x1 + 1;
 
             }
-            spaces[i] = new ParkingSpaceButton("151", new Vector2(x1, y1), new Vector2(19, 47), 0f);
+            spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(19, 47), 0f);
         }
 
-        spaces[160] = new ParkingSpaceButton("161", new Vector2(1019, 41), new Vector2(17, 44), 90f);
+        spaces[161] = new ParkingSpaceButton("162", new Vector2(1019, 41), new Vector2(17, 44), 90f);
         x1 = 1019;
         y1 = 44;
-        for (int i = 161; i < 179; i++) {
+        for (int i = 162; i < 180; i++) {
             y1 = y1 + 29;
             x1 = x1 + 1;
             spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(17, 44), 90f);
         }
 
-        spaces[179] = new ParkingSpaceButton("179", new Vector2(1121, 39), new Vector2(17, 44), 90f);
+        spaces[180] = new ParkingSpaceButton("181", new Vector2(1121, 39), new Vector2(17, 44), 90f);
         x1 = 1121;
         y1 = 39;
-        for (int i = 180; i < 192; i++) {
+        for (int i = 181; i < 193; i++) {
             x1 = x1 + 1;
             y1 = y1 + 29;
             spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(17, 44), 90f);
         }
 
-        spaces[192] = new ParkingSpaceButton("193", new Vector2(1170, 39), new Vector2(17, 44), 90f);
+        spaces[193] = new ParkingSpaceButton("194", new Vector2(1170, 39), new Vector2(17, 44), 90f);
         x1 = 1170;
         y1 = 39;
-        for (int i = 193; i < 205; i++) {
+        for (int i = 194; i < 206; i++) {
             x1 = x1 + 1;
             y1 = y1 + 29;
             spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(17, 44), 90f);
         }
 
-        spaces[205] = new ParkingSpaceButton("205", new Vector2(1272, 29), new Vector2(17, 44), 90f);
+        spaces[206] = new ParkingSpaceButton("206", new Vector2(1272, 29), new Vector2(17, 44), 90f);
         x1 = 1272;
         y1 = 29;
-        for (int i = 206; i < 218; i++) {
+        for (int i = 207; i < 219; i++) {
             x1 = x1 + 1;
             y1 = y1 + 29;
             if (i % 3 == 0) {
@@ -243,10 +258,10 @@ public class ShinemanMapState extends State {
             spaces[i] = new ParkingSpaceButton(Integer.toString(i + 1), new Vector2(x1, y1), new Vector2(17, 44), 90f);
         }
 
-        spaces[218] = new ParkingSpaceButton("218", new Vector2(1325, 27), new Vector2(17, 44), 90f);
+        spaces[219] = new ParkingSpaceButton("219", new Vector2(1325, 27), new Vector2(17, 44), 90f);
         x1 = 1325;
         y1 = 27;
-        for (int i = 219; i < 231; i++) {
+        for (int i = 220; i < 232; i++) {
             x1 = x1 + 1;
             y1 = y1 + 29;
             if (i % 3 == 0) {
@@ -285,6 +300,17 @@ public class ShinemanMapState extends State {
                 gsm.push(sm);
 
             }
+            
+            for(ParkingSpaceButton space : spaces){
+                if (space != null){
+                    if(space.wasTouched(Gdx.input.getX(), Gdx.input.getY())){
+                        spacePressed = true;
+                        spaceID = space.getIdentifier();
+                        System.out.println(spaceID + " was pressed.");
+                    }
+                }
+                
+            }
 
         }
     }
@@ -312,17 +338,31 @@ public class ShinemanMapState extends State {
 
         }
         sr.end();
+        if(spacePressed){
+            sb.begin();
+            sb.draw(popUpBackground, 50, 300, 400, 170);
+            sb.end();
+            sb.begin();
+            sb.draw(emptySpaceButton.getTexture(), emptySpaceButton.getXpos(), emptySpaceButton.getYpos());
+            sb.draw(fillSpaceButton.getTexture(), fillSpaceButton.getXpos(), fillSpaceButton.getYpos());
+            sb.draw(obstructedButton.getTexture(), obstructedButton.getXpos(), obstructedButton.getYpos());
+            sb.draw(setTimerButton.getTexture(), setTimerButton.getXpos(), setTimerButton.getYpos());
+            sb.end();
+        }
         sb.begin();
         sb.draw(background, 0, 0, PBApp.width, PBApp.height);
         sb.draw(backButton.getTexture(), backButton.getXpos(), backButton.getYpos());
         sb.draw(dataButton.getTexture(), dataButton.getXpos(), dataButton.getYpos());
         sb.end();
+        
+        
     }
 
     public void dispose() {
         //remember to add all drawn objects to this method.
         background.dispose();
         map.getTexture().dispose();
+        popUpBackground.dispose();
     }
 
 }
