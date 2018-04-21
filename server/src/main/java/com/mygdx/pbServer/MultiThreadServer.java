@@ -13,9 +13,14 @@ public class MultiThreadServer {
     public static void main(String args[]){
         
         //TODO: load with actual identifiers
-        String [] spaces = {"a","b","c"};
-        ParkingLot shineman = new ParkingLot(spaces);
-        ParkingLot sheldon = new ParkingLot(spaces);
+        //spaces: 0-229  
+        String [] shinemanSpaces = {"a","b","c"};
+        String [] sheldonSpaces = new String[66];
+        for(int i = 1; i <= 66; i++){
+            sheldonSpaces[i-1] = String.valueOf(i);
+        }
+        ParkingLot shineman = new ParkingLot(shinemanSpaces);
+        ParkingLot sheldon = new ParkingLot(sheldonSpaces);
         
 	//Displays local server information
         int port;
