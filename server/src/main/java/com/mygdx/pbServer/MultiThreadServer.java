@@ -12,9 +12,11 @@ import java.util.Scanner;
 public class MultiThreadServer {
     public static void main(String args[]){
         
-        //TODO: load with actual identifiers
-        //spaces: 0-229  
-        String [] shinemanSpaces = {"a","b","c"};
+        
+        String [] shinemanSpaces = new String[230];
+        for(int i = 0; i < 230; i++){
+            shinemanSpaces[i] = String.valueOf(i);
+        }
         String [] sheldonSpaces = new String[66];
         for(int i = 1; i <= 66; i++){
             sheldonSpaces[i-1] = String.valueOf(i);
