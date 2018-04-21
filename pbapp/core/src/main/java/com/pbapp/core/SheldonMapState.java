@@ -3,6 +3,7 @@ package com.pbapp.core;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -40,6 +41,7 @@ public class SheldonMapState extends State {
     private ObjectOutputStream o;
     private ObjectInputStream i;
     private InetAddress address;
+    private OrthographicCamera camera;
     String host;
     String lotName;
     public boolean spacePressed;
@@ -158,11 +160,20 @@ public class SheldonMapState extends State {
         if (Gdx.input.isTouched()) {
             int deltaX = Gdx.input.getDeltaX();
             int deltaY = Gdx.input.getDeltaY();
+            int x = Gdx.input.getX();
+            int y = Gdx.input.getY();
+            System.out.println("X: " + x);
+            //System.out.println("Xmap: " + map.getXpos());
+            //System.out.println("deltaX: " + deltaX); 
+            
+            //add condition somehow so that when map has reached left and right
+            //boundaries, psb don't update anymore until not at boundaries
             map.update(new Vector2(deltaX, deltaY));
-            for (ParkingSpaceButton psb : spaces) {
-                if (deltaX != 0 && deltaY != 0) {
-                    //psb.update(map.getXpos(),map.getYpos());
-                    psb.update(map.getXpos(), map.getYpos());
+            for (ParkingSpaceButton psb: spaces) {
+                if (map.getXpos() > -700 && map.getXpos() < 0) {
+                    psb.update(deltaX,0);
+                } else {
+                   //psb.update(0, 0);
                 }
             }
         }
