@@ -1,13 +1,13 @@
 package com.pbapp.core;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.google.gson.Gson;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,6 +15,7 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,9 +46,11 @@ public class SheldonMapState extends State {
     String lotName;
     public boolean spacePressed;
     public String spaceId;
+    private int colorRefreshClock;
 
     public SheldonMapState(GuiStateManager gsm) {
         super(gsm);
+        colorRefreshClock = 0;
         background = new Texture("SheldonMap.png");
         popUpBackground = new Texture("popUp.png");
         backButton = new Button("BackButton.png", new Vector2(37, 60), new Vector2(230, 50));
@@ -230,7 +233,10 @@ public class SheldonMapState extends State {
                         try {
                             o.writeObject(spaceId + " " + lotName + " fil " + 0);
                             o.flush();
+                            i.readObject();
                         } catch (IOException ex) {
+                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
                             Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -240,7 +246,10 @@ public class SheldonMapState extends State {
                         try {
                             o.writeObject(spaceId + " " + lotName + " opn " + 0);
                             o.flush();
+                            i.readObject();
                         } catch (IOException ex) {
+                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
                             Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -250,7 +259,10 @@ public class SheldonMapState extends State {
                         try {
                             o.writeObject(spaceId + " " + lotName + " obs " + 0);
                             o.flush();
+                            i.readObject();
                         } catch (IOException ex) {
+                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
                             Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -269,6 +281,31 @@ public class SheldonMapState extends State {
     @Override
     public void update(double dt) {
         handleInput();
+        colorRefreshClock++;
+        if(colorRefreshClock == 150){
+            colorRefreshClock = 0;
+            try {
+                Gson gson = new Gson();
+                o.writeObject("chk Sheldon");
+                o.flush();
+                String [] spacesJson = (String[])i.readObject();
+                Hashtable<String,ParkingSpace> serverData = new Hashtable();
+                for(String jsonSpace : spacesJson){
+                    ParkingSpace space = gson.fromJson(jsonSpace, ParkingSpace.class);
+                    serverData.put(space.getId(), space);
+                }
+                for(ParkingSpaceButton space : spaces){
+                    if(serverData.get(space.getIdentifier()) != null){
+                        space.setColor(serverData.get(space.getIdentifier()));
+                    }
+                }
+                i.readObject();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            } catch (ClassNotFoundException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -281,10 +318,10 @@ public class SheldonMapState extends State {
         sb.end();
         sr.begin(ShapeRenderer.ShapeType.Filled);
         Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND); //activate transparency
-        sr.setColor(new Color(0, 255, 0, 0.4f));
         //generating parking spaces
         for (int i = 0; i < spaces.length; i++) {
             if (spaces[i] != null) {
+                sr.setColor(spaces[i].getColor());
                 sr.rect(spaces[i].getXpos(), spaces[i].getYpos(), spaces[i].getWidth(), spaces[i].getHeight(), 0, 0, 0f);
             }
         }
