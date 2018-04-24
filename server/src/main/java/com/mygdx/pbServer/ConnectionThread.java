@@ -56,7 +56,7 @@ public class ConnectionThread implements Runnable{
                         }else{
                             this.sendSpaces(sheldon);
                         }
-                    }else if(!message.equals("Testing")){
+                    }else if(!message.equals("exit")){
                         if(command[2].equals("fil")){
                             //fill the space
                             if(command[1].equals("Shineman")){
