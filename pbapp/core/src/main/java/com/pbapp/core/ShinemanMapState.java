@@ -519,10 +519,11 @@ public class ShinemanMapState extends State {
         // 0,0 because we already specify the origin when creating the spaces[i]
         // last parameter specifies the rotation of shape if necessary
         for (int i = 0; i < spaces.length; i++) {
-            sr.setColor(spaces[i].getColor());
-            sr.rect(spaces[i].getXpos() + map.getXpos(), spaces[i].getYpos()
+            if (spaces[i] != null) {
+                sr.setColor(spaces[i].getColor());
+                sr.rect(spaces[i].getXpos() + map.getXpos(), spaces[i].getYpos()
                 + map.getYpos(), spaces[i].getWidth(), spaces[i].getHeight(), 0, 0, spaces[i].getTilt());
-
+            }
         }
         sr.end();
         if(spacePressed){

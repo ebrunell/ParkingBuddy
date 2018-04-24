@@ -317,11 +317,8 @@ public class SheldonMapState extends State {
                 }
 
             }
-            
-            System.out.println(timerPressed);
 
             if (timerPressed) {
-                System.out.println("TIMERPRESSED");
                 if (sevenAMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
                     LocalTime sevenAM = LocalTime.of(7, 0, 0);
                     int time = (int)HOURS.between(sevenAM, LocalDateTime.now());
@@ -329,7 +326,10 @@ public class SheldonMapState extends State {
                         try {
                             o.writeObject(spaceId + " " + lotName + " fil " + time);
                             o.flush();
+                            i.readObject();
                         } catch (IOException ex) {
+                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
                             Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -341,7 +341,10 @@ public class SheldonMapState extends State {
                         try {
                             o.writeObject(spaceId + " " + lotName + " fil " + time);
                             o.flush();
+                            i.readObject();
                         } catch (IOException ex) {
+                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
                             Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -354,7 +357,10 @@ public class SheldonMapState extends State {
                         try {
                             o.writeObject(spaceId + " " + lotName + " fil " + time);
                             o.flush();
+                            i.readObject();
                         } catch (IOException ex) {
+                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
                             Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -367,7 +373,10 @@ public class SheldonMapState extends State {
                         try {
                             o.writeObject(spaceId + " " + lotName + " fil " + time);
                             o.flush();
+                            i.readObject();
                         } catch (IOException ex) {
+                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
                             Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -379,7 +388,10 @@ public class SheldonMapState extends State {
                         try {
                             o.writeObject(spaceId + " " + lotName + " fil " + time);
                             o.flush();
+                            i.readObject();
                         } catch (IOException ex) {
+                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
                             Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -392,7 +404,10 @@ public class SheldonMapState extends State {
                         try {
                             o.writeObject(spaceId + " " + lotName + " fil " + time);
                             o.flush();
+                            i.readObject();
                         } catch (IOException ex) {
+                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
                             Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -405,7 +420,10 @@ public class SheldonMapState extends State {
                         try {
                             o.writeObject(spaceId + " " + lotName + " fil " + time);
                             o.flush();
+                            i.readObject();
                         } catch (IOException ex) {
+                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
                             Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -418,7 +436,10 @@ public class SheldonMapState extends State {
                         try {
                             o.writeObject(spaceId + " " + lotName + " fil " + time);
                             o.flush();
+                            i.readObject();
                         } catch (IOException ex) {
+                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
                             Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -431,7 +452,10 @@ public class SheldonMapState extends State {
                         try {
                             o.writeObject(spaceId + " " + lotName + " fil " + time);
                             o.flush();
+                            i.readObject();
                         } catch (IOException ex) {
+                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
                             Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -444,7 +468,10 @@ public class SheldonMapState extends State {
                         try {
                             o.writeObject(spaceId + " " + lotName + " fil " + time);
                             o.flush();
+                            i.readObject();
                         } catch (IOException ex) {
+                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
                             Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -457,7 +484,10 @@ public class SheldonMapState extends State {
                         try {
                             o.writeObject(spaceId + " " + lotName + " fil " + time);
                             o.flush();
+                            i.readObject();
                         } catch (IOException ex) {
+                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
                             Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
@@ -470,7 +500,10 @@ public class SheldonMapState extends State {
                         try {
                             o.writeObject(spaceId + " " + lotName + " fil " + time);
                             o.flush();
+                            i.readObject();
                         } catch (IOException ex) {
+                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (ClassNotFoundException ex) {
                             Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
