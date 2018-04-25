@@ -81,7 +81,6 @@ public class ShinemanMapState extends State {
         setTimerButton = new Button("setTimer.png", new Vector2(275, 475), new Vector2(100, 130));
         map = new MapSprite(0, PBApp.height, "ShinemanLotEditedMap.png", -200, -950, -190, -336);
         spacePressed = false;
-        spaceID = "None";
         spacePressed = false;
         timerPressed = false;
         port = "2525";
@@ -417,10 +416,9 @@ public class ShinemanMapState extends State {
             for(ParkingSpaceButton space : spaces){
                 if(space.wasTouched(Gdx.input.getX() - map.getXpos(), Gdx.input.getY() + map.getYpos() )){
                     spacePressed = true;
-                    spaceID = space.getIdentifier();
-                    System.out.println(spaceID + " was pressed.");
-                }
-                
+                    spaceId = space.getIdentifier();
+                    //System.out.println(spaceId + " was pressed.");
+                }  
             }
             
             
@@ -428,6 +426,7 @@ public class ShinemanMapState extends State {
                 if (fillSpaceButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
                      if (messageRecieved) {
                         try {
+                            //System.out.println("WRITING: " + spaceId);
                             o.writeObject(spaceId + " " + lotName + " fil " + 0);
                             o.flush();
                             i.readObject();
@@ -454,6 +453,7 @@ public class ShinemanMapState extends State {
                 } else if (obstructedButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
                    if (messageRecieved) {
                         try {
+                            //System.out.println("In ShinemanMapState writing object "+ spaceID + " " + lotName +" obs " + 0);
                             o.writeObject(spaceId + " " + lotName + " obs " + 0);
                             o.flush();
                             i.readObject();
@@ -519,6 +519,9 @@ public class ShinemanMapState extends State {
         // 0,0 because we already specify the origin when creating the spaces[i]
         // last parameter specifies the rotation of shape if necessary
         for (int i = 0; i < spaces.length; i++) {
+            if(spaces[i] == null){
+                System.out.println("Space at index i: " + i +" is null" );
+            }
             if (spaces[i] != null) {
                 sr.setColor(spaces[i].getColor());
                 sr.rect(spaces[i].getXpos() + map.getXpos(), spaces[i].getYpos()
@@ -543,7 +546,7 @@ public class ShinemanMapState extends State {
         }
         
         if (timerPressed) {
-            System.out.println("Timer RENDER");
+            //System.out.println("Timer RENDER");
             sb.begin();
             sb.draw(timerBackground, 50, 300);
             sb.end();
@@ -581,7 +584,7 @@ public class ShinemanMapState extends State {
         //remember to add all drawn objects to this method.
         background.dispose();
         map.getTexture().dispose();
-        popUpBackground.dispose();
+        //popUpBackground.dispose();
     }
 
 }
