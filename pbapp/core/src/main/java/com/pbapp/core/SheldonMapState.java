@@ -64,6 +64,7 @@ public class SheldonMapState extends State {
     String lotName;
     public boolean spacePressed;
     public boolean timerPressed;
+    public boolean delay;
     public String spaceId;
     private int colorRefreshClock;
 
@@ -99,6 +100,7 @@ public class SheldonMapState extends State {
         sr = new ShapeRenderer();
         spacePressed = false;
         timerPressed = false;
+        delay = false;
         port = "2525";
         lotName = "Sheldon";
         messageRecieved = false;
@@ -207,13 +209,13 @@ public class SheldonMapState extends State {
             //add condition somehow so that when map has reached left and right
             //boundaries, psb don't update anymore until not at boundaries
             map.update(new Vector2(deltaX, deltaY));
-            for (ParkingSpaceButton psb : spaces) {
-                if (map.getXpos() > -700 && map.getXpos() < 0) {
-                    psb.update(deltaX, 0);
-                } else {
-                    //psb.update(0, 0);
-                }
-            }
+//            for (ParkingSpaceButton psb : spaces) {
+//                if (map.getXpos() > -700 && map.getXpos() < 0) {
+//                    psb.update(deltaX, 0);
+//                } else {
+//                    //psb.update(0, 0);
+//                }
+//            }
         }
 
         if (Gdx.input.justTouched()) {
@@ -254,264 +256,262 @@ public class SheldonMapState extends State {
                 gsm.push(sd);
             }
 
-            for (ParkingSpaceButton space : spaces) {
-                if (space.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    spacePressed = true;
-                    spaceId = space.getIdentifier();
-                    //System.out.println(spaceId);
+            if (!spacePressed) {
+                for (ParkingSpaceButton space : spaces) {
+                    if (space.wasTouched(Gdx.input.getX() - map.getXpos(), Gdx.input.getY())) {
+                        spacePressed = true;
+                        spaceId = space.getIdentifier();
+                        delay = true;
+                        System.out.println("spaceId: " + spaceId + " was pressed");
+                        break;
+                        
+                    }
                 }
             }
 
             //id,lotname,cmd(fil,obs,opn,chk),data
-            if (spacePressed) {
-                if (fillSpaceButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    if (messageRecieved) {
-                        try {
-                            o.writeObject(spaceId + " " + lotName + " fil " + 0);
-                            o.flush();
-                            i.readObject();
-                        } catch (IOException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+            if (!delay) {
+                if (spacePressed) {
+                    if (fillSpaceButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + 0);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
-                    }
-                    spacePressed = false;
-                } else if (emptySpaceButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    if (messageRecieved) {
-                        try {
-                            o.writeObject(spaceId + " " + lotName + " opn " + 0);
-                            o.flush();
-                            i.readObject();
-                        } catch (IOException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        spacePressed = false;
+                    } else if (emptySpaceButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " opn " + 0);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
-                    }
-                    spacePressed = false;
-                } else if (obstructedButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    if (messageRecieved) {
-                        try {
-                            o.writeObject(spaceId + " " + lotName + " obs " + 0);
-                            o.flush();
-                            i.readObject();
-                        } catch (IOException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        spacePressed = false;
+                    } else if (obstructedButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " obs " + 0);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
-                    }
-                    spacePressed = false;
+                        spacePressed = false;
 
-                } else if (setTimerButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    System.out.println("timer");
-                    //spacePressed = false;
-                    timerPressed = true;
-               
+                    } else if (setTimerButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        System.out.println("timer");
+                        //spacePressed = false;
+                        timerPressed = true;
 
-                } else if (closeButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    System.out.println("close button touched");
-                    spacePressed = false;
-                    timerPressed = false;
+                    } else if (closeButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        System.out.println("close button touched");
+                        spacePressed = false;
+                        timerPressed = false;
+                    }
+
                 }
 
-            }
-
-            if (timerPressed) {
-                if (sevenAMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    LocalTime sevenAM = LocalTime.of(7, 0, 0);
-                    int time = (int)HOURS.between(sevenAM, LocalDateTime.now());
-                    if (messageRecieved) {
-                        try {
-                            o.writeObject(spaceId + " " + lotName + " fil " + time);
-                            o.flush();
-                            i.readObject();
-                        } catch (IOException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                if (timerPressed) {
+                    if (sevenAMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime sevenAM = LocalTime.of(7, 0, 0);
+                        int time = (int) HOURS.between(sevenAM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
+
+                    } else if (eightAMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime eightAM = LocalTime.of(8, 0, 0);
+                        int time = (int) HOURS.between(eightAM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if (nineAMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime nineAM = LocalTime.of(9, 0, 0);
+                        int time = (int) HOURS.between(nineAM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if (tenAMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime tenAM = LocalTime.of(10, 0, 0);
+                        int time = (int) HOURS.between(tenAM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if (elevenAMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime elevenAM = LocalTime.of(11, 0, 0);
+                        int time = (int) HOURS.between(elevenAM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if (twelvePMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime twelvePM = LocalTime.of(12, 0, 0);
+                        int time = (int) HOURS.between(twelvePM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if ((onePMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY()))) {
+                        LocalTime onePM = LocalTime.of(13, 0, 0);
+                        int time = (int) HOURS.between(onePM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if (twoPMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime twoPM = LocalTime.of(14, 0, 0);
+                        int time = (int) HOURS.between(twoPM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if (threePMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime threePM = LocalTime.of(15, 0, 0);
+                        int time = (int) HOURS.between(threePM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if (fourPMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime fourPM = LocalTime.of(16, 0, 0);
+                        int time = (int) HOURS.between(fourPM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if (fivePMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime fivePM = LocalTime.of(17, 0, 0);
+                        int time = (int) HOURS.between(fivePM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if (sixPMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime sixPM = LocalTime.of(18, 0, 0);
+                        int time = (int) HOURS.between(sixPM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
                     }
 
-                } else if (eightAMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    LocalTime eightAM = LocalTime.of(8, 0, 0);
-                    int time = (int)HOURS.between(eightAM, LocalDateTime.now());
-                    if (messageRecieved) {
-                        try {
-                            o.writeObject(spaceId + " " + lotName + " fil " + time);
-                            o.flush();
-                            i.readObject();
-                        } catch (IOException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    
-
-                } else if (nineAMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    LocalTime nineAM = LocalTime.of(9, 0, 0);
-                    int time = (int)HOURS.between(nineAM, LocalDateTime.now());
-                    if (messageRecieved) {
-                        try {
-                            o.writeObject(spaceId + " " + lotName + " fil " + time);
-                            o.flush();
-                            i.readObject();
-                        } catch (IOException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    
-
-                } else if (tenAMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    LocalTime tenAM = LocalTime.of(10, 0, 0);
-                    int time = (int)HOURS.between(tenAM, LocalDateTime.now());
-                    if (messageRecieved) {
-                        try {
-                            o.writeObject(spaceId + " " + lotName + " fil " + time);
-                            o.flush();
-                            i.readObject();
-                        } catch (IOException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-
-                } else if (elevenAMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    LocalTime elevenAM = LocalTime.of(11, 0, 0);
-                    int time = (int)HOURS.between(elevenAM, LocalDateTime.now());
-                    if (messageRecieved) {
-                        try {
-                            o.writeObject(spaceId + " " + lotName + " fil " + time);
-                            o.flush();
-                            i.readObject();
-                        } catch (IOException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    
-
-                } else if (twelvePMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    LocalTime twelvePM = LocalTime.of(12, 0, 0);
-                    int time = (int)HOURS.between(twelvePM, LocalDateTime.now());
-                    if (messageRecieved) {
-                        try {
-                            o.writeObject(spaceId + " " + lotName + " fil " + time);
-                            o.flush();
-                            i.readObject();
-                        } catch (IOException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    
-
-                } else if ((onePMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY()))) {
-                    LocalTime onePM = LocalTime.of(13, 0, 0);
-                    int time = (int)HOURS.between(onePM, LocalDateTime.now());
-                    if (messageRecieved) {
-                        try {
-                            o.writeObject(spaceId + " " + lotName + " fil " + time);
-                            o.flush();
-                            i.readObject();
-                        } catch (IOException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    
-
-                } else if (twoPMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    LocalTime twoPM = LocalTime.of(14, 0, 0);
-                    int time = (int)HOURS.between(twoPM, LocalDateTime.now());
-                    if (messageRecieved) {
-                        try {
-                            o.writeObject(spaceId + " " + lotName + " fil " + time);
-                            o.flush();
-                            i.readObject();
-                        } catch (IOException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    
-
-                } else if (threePMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    LocalTime threePM = LocalTime.of(15, 0, 0);
-                    int time = (int)HOURS.between(threePM, LocalDateTime.now());
-                    if (messageRecieved) {
-                        try {
-                            o.writeObject(spaceId + " " + lotName + " fil " + time);
-                            o.flush();
-                            i.readObject();
-                        } catch (IOException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    
-
-                } else if (fourPMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    LocalTime fourPM = LocalTime.of(16, 0, 0);
-                    int time = (int)HOURS.between(fourPM, LocalDateTime.now());
-                    if (messageRecieved) {
-                        try {
-                            o.writeObject(spaceId + " " + lotName + " fil " + time);
-                            o.flush();
-                            i.readObject();
-                        } catch (IOException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    
-
-                } else if (fivePMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    LocalTime fivePM = LocalTime.of(17, 0, 0);
-                    int time = (int)HOURS.between(fivePM, LocalDateTime.now());
-                    if (messageRecieved) {
-                        try {
-                            o.writeObject(spaceId + " " + lotName + " fil " + time);
-                            o.flush();
-                            i.readObject();
-                        } catch (IOException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    
-
-                } else if (sixPMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    LocalTime sixPM = LocalTime.of(18, 0, 0);
-                    int time = (int)HOURS.between(sixPM,LocalDateTime.now());
-                    if (messageRecieved) {
-                        try {
-                            o.writeObject(spaceId + " " + lotName + " fil " + time);
-                            o.flush();
-                            i.readObject();
-                        } catch (IOException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(SheldonMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-                    
-                    
                 }
-
             }
+            delay = false;
+
         }
     }
 
@@ -519,20 +519,20 @@ public class SheldonMapState extends State {
     public void update(double dt) {
         handleInput();
         colorRefreshClock++;
-        if(colorRefreshClock == 150){
+        if (colorRefreshClock == 150) {
             colorRefreshClock = 0;
             try {
                 Gson gson = new Gson();
                 o.writeObject("chk Sheldon");
                 o.flush();
-                String [] spacesJson = (String[])i.readObject();
-                Hashtable<String,ParkingSpace> serverData = new Hashtable();
-                for(String jsonSpace : spacesJson){
+                String[] spacesJson = (String[]) i.readObject();
+                Hashtable<String, ParkingSpace> serverData = new Hashtable();
+                for (String jsonSpace : spacesJson) {
                     ParkingSpace space = gson.fromJson(jsonSpace, ParkingSpace.class);
                     serverData.put(space.getId(), space);
                 }
-                for(ParkingSpaceButton space : spaces){
-                    if(serverData.get(space.getIdentifier()) != null){
+                for (ParkingSpaceButton space : spaces) {
+                    if (serverData.get(space.getIdentifier()) != null) {
                         space.setColor(serverData.get(space.getIdentifier()));
                     }
                 }
@@ -559,7 +559,7 @@ public class SheldonMapState extends State {
         for (int i = 0; i < spaces.length; i++) {
             if (spaces[i] != null) {
                 sr.setColor(spaces[i].getColor());
-                sr.rect(spaces[i].getXpos(), spaces[i].getYpos(), spaces[i].getWidth(), spaces[i].getHeight(), 0, 0, 0f);
+                sr.rect(spaces[i].getXpos() + map.getXpos(), spaces[i].getYpos(), spaces[i].getWidth(), spaces[i].getHeight(), 0, 0, 0f);
             }
         }
         sr.end();
@@ -582,7 +582,7 @@ public class SheldonMapState extends State {
         }
 
         if (timerPressed) {
-            System.out.println("Timer RENDER");
+            //System.out.println("Timer RENDER");
             sb.begin();
             sb.draw(timerBackground, 50, 300);
             sb.end();
