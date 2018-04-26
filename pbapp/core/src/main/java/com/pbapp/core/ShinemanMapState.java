@@ -15,6 +15,9 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import static java.time.temporal.ChronoUnit.HOURS;
 import java.util.Hashtable;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,18 +57,18 @@ public class ShinemanMapState extends State {
     private String port;
     public String lotName;
     private Boolean messageRecieved;
-    
+
     private Socket s;
     private ObjectOutputStream o;
     private ObjectInputStream i;
     private InetAddress address;
     private OrthographicCamera camera;
-    
+
     public boolean spacePressed;
     public boolean timerPressed;
+    public boolean delay;
     public String spaceId;
     private int colorRefreshClock;
-    
 
     public ShinemanMapState(GuiStateManager gsm) {
         super(gsm);
@@ -86,10 +89,11 @@ public class ShinemanMapState extends State {
         port = "2525";
         lotName = "Shineman";
         messageRecieved = false;
+        delay = true;
         s = null;
         o = null;
         i = null;
-        
+
         sevenAMButton = new Button("7AM.png", new Vector2(65, 375), new Vector2(100, 100));
         eightAMButton = new Button("8AM.png", new Vector2(160, 375), new Vector2(100, 100));
         nineAMButton = new Button("9AM.png", new Vector2(250, 375), new Vector2(100, 100));
@@ -103,7 +107,7 @@ public class ShinemanMapState extends State {
         fivePMButton = new Button("5PM.png", new Vector2(250, 475), new Vector2(100, 100));
         sixPMButton = new Button("6PM.png", new Vector2(340, 475), new Vector2(100, 100));
         closeButton = new Button("xButton.png", new Vector2(50, 342), new Vector2(100, 100));
-        
+
         try {
             address = InetAddress.getLocalHost();
             host = address.getHostAddress();
@@ -132,7 +136,7 @@ public class ShinemanMapState extends State {
             ex.printStackTrace();
             System.exit(1);
         }
-        
+
         spaces = new ParkingSpaceButton[230];
         spaces[0] = new ParkingSpaceButton("1", new Vector2(260, 238), new Vector2(17, 50), 23f);
         spaces[1] = new ParkingSpaceButton("2", new Vector2(280, 230), new Vector2(17, 50), 23f);
@@ -377,27 +381,27 @@ public class ShinemanMapState extends State {
 
         if (Gdx.input.justTouched()) {
 
-            if (backButton.wasTouched(Gdx.input.getX() , Gdx.input.getY())) {
-                 try {
-                        o.writeObject("exit");
-                        o.flush();
-                        String response = "";
-                        while (response.equals("")) {
-                            response = (String) i.readObject();
-                        }
-                        System.out.println(response);
-                        i.close();
-                        o.close();
-                        s.close();
-                    } catch (IOException ex) {
-                        System.out.println("Failed to intialize socket/streams");
-                        ex.printStackTrace();
-                        System.exit(1);
-                    } catch (ClassNotFoundException ex) {
-                        System.out.println("Object recieved was not string");
-                        ex.printStackTrace();
-                        System.exit(1);
+            if (backButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                try {
+                    o.writeObject("exit");
+                    o.flush();
+                    String response = "";
+                    while (response.equals("")) {
+                        response = (String) i.readObject();
                     }
+                    System.out.println(response);
+                    i.close();
+                    o.close();
+                    s.close();
+                } catch (IOException ex) {
+                    System.out.println("Failed to intialize socket/streams");
+                    ex.printStackTrace();
+                    System.exit(1);
+                } catch (ClassNotFoundException ex) {
+                    System.out.println("Object recieved was not string");
+                    ex.printStackTrace();
+                    System.exit(1);
+                }
                 this.dispose();
                 gsm.pop();
                 MainMenuState m = new MainMenuState(gsm);
@@ -412,67 +416,260 @@ public class ShinemanMapState extends State {
                 gsm.push(sm);
 
             }
-            
-            for(ParkingSpaceButton space : spaces){
-                if(space.wasTouched(Gdx.input.getX() - map.getXpos(), Gdx.input.getY() + map.getYpos() )){
-                    spacePressed = true;
-                    spaceId = space.getIdentifier();
-                    //System.out.println(spaceId + " was pressed.");
-                }  
+
+            if (!spacePressed) {
+                for (ParkingSpaceButton space : spaces) {
+                    //if(space.wasTouched(Gdx.input.getX() - map.getXpos(), Gdx.input.getY() + map.getYpos() )){
+                    if (space.wasTouchedTilted(Gdx.input.getX() - map.getXpos(), Gdx.input.getY() + map.getYpos(), space.getTilt())) {
+                        spacePressed = true;
+                        spaceId = space.getIdentifier();
+                        System.out.println(spaceId + " was pressed.");
+                        delay = true;
+                        break;
+                    }
+                }
+
             }
-            
-            
-            if (spacePressed) {
-                if (fillSpaceButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                     if (messageRecieved) {
-                        try {
-                            //System.out.println("WRITING: " + spaceId);
-                            o.writeObject(spaceId + " " + lotName + " fil " + 0);
-                            o.flush();
-                            i.readObject();
-                        } catch (IOException ex) {
-                            Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+
+            if (!delay) {
+                if (spacePressed) {
+                    if (fillSpaceButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        if (messageRecieved) {
+                            try {
+                                //System.out.println("WRITING: " + spaceId);
+                                o.writeObject(spaceId + " " + lotName + " fil " + 0);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
-                    }
-                    spacePressed = false;
-                } else if (emptySpaceButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    if (messageRecieved) {
-                        try {
-                            o.writeObject(spaceId + " " + lotName + " opn " + 0);
-                            o.flush();
-                            i.readObject();
-                        } catch (IOException ex) {
-                            Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        spacePressed = false;
+                    } else if (emptySpaceButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " opn " + 0);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
-                    }
-                    spacePressed = false;
-                } else if (obstructedButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                   if (messageRecieved) {
-                        try {
-                            //System.out.println("In ShinemanMapState writing object "+ spaceID + " " + lotName +" obs " + 0);
-                            o.writeObject(spaceId + " " + lotName + " obs " + 0);
-                            o.flush();
-                            i.readObject();
-                        } catch (IOException ex) {
-                            Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                        spacePressed = false;
+                    } else if (obstructedButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        if (messageRecieved) {
+                            try {
+                                //System.out.println("In ShinemanMapState writing object "+ spaceID + " " + lotName +" obs " + 0);
+                                o.writeObject(spaceId + " " + lotName + " obs " + 0);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
+                        spacePressed = false;
+                    } else if (setTimerButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        System.out.println("timer");
+                        timerPressed = true;
+                    } else if (closeButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        System.out.println("close button touched");
+                        spacePressed = false;
+                        timerPressed = false;
                     }
-                    spacePressed = false;
-                } else if (setTimerButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    System.out.println("timer");
-                    timerPressed = true;
-                }else if (closeButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                    System.out.println("close button touched");
-                    spacePressed = false;
-                    timerPressed = false;
+                }
+
+                if (timerPressed) {
+                    if (sevenAMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime sevenAM = LocalTime.of(7, 0, 0);
+                        int time = (int) HOURS.between(sevenAM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if (eightAMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime eightAM = LocalTime.of(8, 0, 0);
+                        int time = (int) HOURS.between(eightAM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if (nineAMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime nineAM = LocalTime.of(9, 0, 0);
+                        int time = (int) HOURS.between(nineAM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if (tenAMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime tenAM = LocalTime.of(10, 0, 0);
+                        int time = (int) HOURS.between(tenAM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if (elevenAMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime elevenAM = LocalTime.of(11, 0, 0);
+                        int time = (int) HOURS.between(elevenAM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if (twelvePMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime twelvePM = LocalTime.of(12, 0, 0);
+                        int time = (int) HOURS.between(twelvePM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if ((onePMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY()))) {
+                        LocalTime onePM = LocalTime.of(13, 0, 0);
+                        int time = (int) HOURS.between(onePM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if (twoPMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime twoPM = LocalTime.of(14, 0, 0);
+                        int time = (int) HOURS.between(twoPM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if (threePMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime threePM = LocalTime.of(15, 0, 0);
+                        int time = (int) HOURS.between(threePM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if (fourPMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime fourPM = LocalTime.of(16, 0, 0);
+                        int time = (int) HOURS.between(fourPM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if (fivePMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime fivePM = LocalTime.of(17, 0, 0);
+                        int time = (int) HOURS.between(fivePM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    } else if (sixPMButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
+                        LocalTime sixPM = LocalTime.of(18, 0, 0);
+                        int time = (int) HOURS.between(sixPM, LocalDateTime.now());
+                        if (messageRecieved) {
+                            try {
+                                o.writeObject(spaceId + " " + lotName + " fil " + time);
+                                o.flush();
+                                i.readObject();
+                            } catch (IOException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            } catch (ClassNotFoundException ex) {
+                                Logger.getLogger(ShinemanMapState.class.getName()).log(Level.SEVERE, null, ex);
+                            }
+                        }
+
+                    }
+
                 }
             }
+            delay = false;
 
         }
     }
@@ -481,20 +678,20 @@ public class ShinemanMapState extends State {
     public void update(double dt) {
         handleInput();
         colorRefreshClock++;
-        if(colorRefreshClock == 150){
+        if (colorRefreshClock == 150) {
             colorRefreshClock = 0;
             try {
                 Gson gson = new Gson();
                 o.writeObject("chk Shineman");
                 o.flush();
-                String [] spacesJson = (String[])i.readObject();
-                Hashtable<String,ParkingSpace> serverData = new Hashtable();
-                for(String jsonSpace : spacesJson){
+                String[] spacesJson = (String[]) i.readObject();
+                Hashtable<String, ParkingSpace> serverData = new Hashtable();
+                for (String jsonSpace : spacesJson) {
                     ParkingSpace space = gson.fromJson(jsonSpace, ParkingSpace.class);
                     serverData.put(space.getId(), space);
                 }
-                for(ParkingSpaceButton space : spaces){
-                    if(serverData.get(space.getIdentifier()) != null){
+                for (ParkingSpaceButton space : spaces) {
+                    if (serverData.get(space.getIdentifier()) != null) {
                         space.setColor(serverData.get(space.getIdentifier()));
                     }
                 }
@@ -519,17 +716,17 @@ public class ShinemanMapState extends State {
         // 0,0 because we already specify the origin when creating the spaces[i]
         // last parameter specifies the rotation of shape if necessary
         for (int i = 0; i < spaces.length; i++) {
-            if(spaces[i] == null){
-                System.out.println("Space at index i: " + i +" is null" );
+            if (spaces[i] == null) {
+                System.out.println("Space at index i: " + i + " is null");
             }
             if (spaces[i] != null) {
                 sr.setColor(spaces[i].getColor());
                 sr.rect(spaces[i].getXpos() + map.getXpos(), spaces[i].getYpos()
-                + map.getYpos(), spaces[i].getWidth(), spaces[i].getHeight(), 0, 0, spaces[i].getTilt());
+                        + map.getYpos(), spaces[i].getWidth(), spaces[i].getHeight(), 0, 0, spaces[i].getTilt());
             }
         }
         sr.end();
-        if(spacePressed){
+        if (spacePressed) {
             sb.begin();
             sb.draw(popUpBackground, 50, 300, 400, 170);
             sb.end();
@@ -539,12 +736,12 @@ public class ShinemanMapState extends State {
             sb.draw(obstructedButton.getTexture(), obstructedButton.getXpos(), obstructedButton.getYpos());
             sb.draw(setTimerButton.getTexture(), setTimerButton.getXpos(), setTimerButton.getYpos());
             sb.end();
-            
+
             sb.begin();
             sb.draw(closeButton.getTexture(), closeButton.getXpos(), closeButton.getYpos());
             sb.end();
         }
-        
+
         if (timerPressed) {
             //System.out.println("Timer RENDER");
             sb.begin();
@@ -570,14 +767,13 @@ public class ShinemanMapState extends State {
             sb.draw(closeButton.getTexture(), closeButton.getXpos(), closeButton.getYpos());
             sb.end();
         }
-        
+
         sb.begin();
         sb.draw(background, 0, 0, PBApp.width, PBApp.height);
         sb.draw(backButton.getTexture(), backButton.getXpos(), backButton.getYpos());
         sb.draw(dataButton.getTexture(), dataButton.getXpos(), dataButton.getYpos());
         sb.end();
-        
-        
+
     }
 
     public void dispose() {
