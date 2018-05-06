@@ -17,8 +17,8 @@ public class MultiThreadServer {
         for(int i = 0; i < 230; i++){
             shinemanSpaces[i] = String.valueOf(i + 1);
         }
-        String [] sheldonSpaces = new String[66];
-        for(int i = 1; i <= 66; i++){
+        String [] sheldonSpaces = new String[67];
+        for(int i = 1; i <= 67; i++){
             sheldonSpaces[i-1] = String.valueOf(i);
         }
         ParkingLot shineman = new ParkingLot(shinemanSpaces);
