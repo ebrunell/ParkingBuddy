@@ -32,7 +32,6 @@ public class ShinemanMapState extends State {
     private Texture popUpBackground;
     private Texture timerBackground;
     private Button backButton;
-    private Button dataButton;
     private Button emptySpaceButton;
     private Button fillSpaceButton;
     private Button obstructedButton;
@@ -77,7 +76,6 @@ public class ShinemanMapState extends State {
         popUpBackground = new Texture("popUp.png");
         timerBackground = new Texture("timerPopUp.png");
         backButton = new Button("BackButton.png", new Vector2(37, 60), new Vector2(230, 50));
-        dataButton = new Button("DataButton.png", new Vector2(400, 60), new Vector2(230, 50));
         emptySpaceButton = new Button("emptySpace.png", new Vector2(75, 405), new Vector2(100, 100));
         fillSpaceButton = new Button("fillSpace.png", new Vector2(275, 405), new Vector2(100, 100));
         obstructedButton = new Button("obstructed.png", new Vector2(75, 475), new Vector2(100, 100));
@@ -406,14 +404,6 @@ public class ShinemanMapState extends State {
                 gsm.pop();
                 MainMenuState m = new MainMenuState(gsm);
                 gsm.push(m);
-
-            }
-
-            if (dataButton.wasTouched(Gdx.input.getX(), Gdx.input.getY())) {
-                this.dispose();
-                gsm.pop();
-                ShinemanDataState sm = new ShinemanDataState(gsm);
-                gsm.push(sm);
 
             }
 
@@ -771,7 +761,6 @@ public class ShinemanMapState extends State {
         sb.begin();
         sb.draw(background, 0, 0, PBApp.width, PBApp.height);
         sb.draw(backButton.getTexture(), backButton.getXpos(), backButton.getYpos());
-        sb.draw(dataButton.getTexture(), dataButton.getXpos(), dataButton.getYpos());
         sb.end();
 
     }
