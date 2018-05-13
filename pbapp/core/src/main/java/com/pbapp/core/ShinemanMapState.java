@@ -73,7 +73,7 @@ public class ShinemanMapState extends State {
         super(gsm);
         colorRefreshClock = 0;
         background = new Texture("ShinemanMap.png");
-        popUpBackground = new Texture("popUp.png");
+        popUpBackground = new Texture("PopUp.png");
         timerBackground = new Texture("timerPopUp.png");
         backButton = new Button("BackButton.png", new Vector2(37, 60), new Vector2(230, 50));
         emptySpaceButton = new Button("emptySpace.png", new Vector2(75, 405), new Vector2(100, 100));
