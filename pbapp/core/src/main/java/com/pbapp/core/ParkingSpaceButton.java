@@ -6,6 +6,7 @@
 package com.pbapp.core;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -43,6 +44,15 @@ public class ParkingSpaceButton extends Button {
         identifier = id;
         tilt = t;
         position = p;
+        color = new Color(0, 255, 0, 0.4f);
+    }
+    
+     public ParkingSpaceButton(String id, Vector2 p, Vector2 d, float t, String test) {
+        super(test,p, d);
+        identifier = id;
+        tilt = t;
+        position = p;
+        color = new Color(0, 255, 0, 0.4f);
     }
     
     public String getIdentifier(){
@@ -56,7 +66,11 @@ public class ParkingSpaceButton extends Button {
     public void update(int x, int y){
        Vector2 deltapos = new Vector2(x,y);
        position.add(deltapos);
-       
+    }
+    
+    public void secondUpdate(int x, int y){
+        super.setXpos(super.getXpos() + x);
+        super.setYpos(super.getYpos() + y);
     }
 
     private void Color(int i, int i0, int i1, float f) {

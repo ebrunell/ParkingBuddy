@@ -39,9 +39,9 @@ public class ParkingSpace implements Serializable{
     public void fillFor(long h, long m, long s){
         onTimer = true;
         LocalDateTime expiration = LocalDateTime.now();
-        expiration.plusHours(h);
-        expiration.plusMinutes(m);
-        expiration.plusSeconds(s);
+        expiration = expiration.plusHours(h);
+        expiration = expiration.plusMinutes(m);
+        expiration = expiration.plusSeconds(s);
         timeToOpen = expiration;
     }
     

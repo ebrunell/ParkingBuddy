@@ -33,6 +33,9 @@ public class ParkingSpaceTest {
      */
     @Test
     public void testGetId() {
+        System.out.println("testGetID");
+        ParkingSpace space = new ParkingSpace("747");
+        assertEquals("747", space.getId());
     }
 
     /**
@@ -40,6 +43,12 @@ public class ParkingSpaceTest {
      */
     @Test
     public void testObstruct() {
+        System.out.println("testObstruct");
+        ParkingSpace space = new ParkingSpace("1");
+        assertEquals(false, space.isObstructed());
+        space.obstruct();
+        assertEquals(true, space.isObstructed());
+
     }
 
     /**
@@ -47,8 +56,11 @@ public class ParkingSpaceTest {
      */
     @Test
     public void testFill() {
-        
-        
+        System.out.println("testFill");
+        ParkingSpace space = new ParkingSpace("1");
+        assertEquals(false, space.isFilled());
+        space.fill();
+        assertEquals(true, space.isFilled());
     }
 
     /**
